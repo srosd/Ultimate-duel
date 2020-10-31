@@ -5,3 +5,31 @@ body{
 #canvas{
     border: 1px solid black;
 }
+
+#one-win{
+    padding-top: 20vh;
+    padding-bottom: 40vh;
+    background-color: #000;
+    color: blanchedalmond;
+}
+#one-win iframe{
+    margin-bottom: 4vh;
+}
+
+#one-win h1{
+    font-size: 70px;
+}
+
+#two-win{
+    padding-top: 20vh;
+    padding-bottom: 40vh;
+    background-color: #000;
+    color: blanchedalmond;
+}
+#two-win iframe{
+    margin-bottom: 4vh;
+}
+
+#two-win h1{
+    font-size: 70px;
+}
