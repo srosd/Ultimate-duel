@@ -15,16 +15,18 @@ window.onload = () => {
     // CLASES ========================================
 
     class Player {
-        constructor(_x, _imageRoute){
+        constructor(_x, _rightImageRoute, _leftImageRoute){
             this.x = _x
             this.y = 300
             this.width = 65
             this.height = 140
-            this.image = _imageRoute
+            this.imageRight = _rightImageRoute
+            this.imageLeft = _leftImageRoute
             this.alive = true
             this.lifes = 3
             this.direction = ''
             this.ammo = []
+            this.movesCounter = 0
         }
 
         receiveDamage(){
@@ -51,8 +53,8 @@ window.onload = () => {
     
     // CREACIÓN DE LOS JUGADORES =====================
 
-    const playerOne = new Player(70, './images/cowboy1.png')
-    const playerTwo = new Player(865, './images/cowboy2.png')
+    const playerOne = new Player(70, './images/playerOne-rightStep.png', './images/playerOne-leftStep.png')
+    const playerTwo = new Player(865, './images/playerTwo-rightStep.png', './images/playerTwo-leftStep.png')
     
     
     // FUNCIONES =====================================
@@ -66,9 +68,12 @@ window.onload = () => {
         drawBulletsTwo()
         checkHurtOne()
         checkHurtTwo()
+        drawLifesOne()
+        drawLifesTwo()
                 
         requestAnimationFrame(updateCanvas)
     }
+
 
     const drawTown = () => {
         const town = new Image()
@@ -169,22 +174,47 @@ window.onload = () => {
 
 
     const drawCowboyOne = () => {
-        const cowboyOne = new Image()
-        cowboyOne.src = playerOne.image
-        cowboyOne.onload = () => {
-            ctx.drawImage(cowboyOne, playerOne.x, playerOne.y, playerOne.width, playerOne.height)
+
+        if(playerOne.movesCounter%2===0){
+            let cowboyOne = new Image()
+            cowboyOne.src = playerOne.imageLeft
+            cowboyOne.onload = () => {
+                ctx.drawImage(cowboyOne, playerOne.x, playerOne.y, playerOne.width, playerOne.height)
+            }
         }
+        if(playerOne.movesCounter%2===1){
+            let cowboyOne = new Image()
+            cowboyOne.src = playerOne.imageRight
+            cowboyOne.onload = () => {
+                ctx.drawImage(cowboyOne, playerOne.x, playerOne.y, playerOne.width, playerOne.height)
+            }
+        }
+
+
     }
     
     const drawCowboyTwo = () => {
-        const cowboyTwo = new Image()
-        cowboyTwo.src = playerTwo.image
-        cowboyTwo.onload = () => {
-            ctx.drawImage(cowboyTwo, playerTwo.x, playerTwo.y, playerTwo.width, playerTwo.height)
+
+        if(playerTwo.movesCounter%2===0){
+            let cowboyTwo = new Image()
+            cowboyTwo.src = playerTwo.imageLeft
+            cowboyTwo.onload = () => {
+                ctx.drawImage(cowboyTwo, playerTwo.x, playerTwo.y, playerTwo.width, playerTwo.height)
+            }
         }
+        if(playerTwo.movesCounter%2===1){
+            let cowboyTwo = new Image()
+            cowboyTwo.src = playerTwo.imageRight
+            cowboyTwo.onload = () => {
+                ctx.drawImage(cowboyTwo, playerTwo.x, playerTwo.y, playerTwo.width, playerTwo.height)
+            }
+        }
+
+
     }
 
     const movePlayerOne = () => {
+        playerOne.movesCounter++
         if(playerOne.direction==='up' && playerOne.y > 160){
             // drawTown()
             playerOne.y-=30                                      // Velocidad fijada en 30px porque con keyup se mueven click a click
@@ -205,6 +235,7 @@ window.onload = () => {
     }
     
     const movePlayerTwo = () => {
+        playerTwo.movesCounter++
         if(playerTwo.direction==='up' && playerTwo.y > 160){
             // drawTown()
             playerTwo.y-=30
@@ -221,6 +252,38 @@ window.onload = () => {
             // drawTown()
             playerTwo.x+=30
             drawCowboyTwo()
+        }
+    }
+
+    const drawLifesOne = () => {
+        const life = new Image()
+        life.src = './images/life.png'
+        life.onload = () => {
+            if(playerOne.lifes>=1){
+                ctx.drawImage(life, 20, 220, 30, 20)
+            }
+            if (playerOne.lifes>=2){
+                ctx.drawImage(life, 50, 220, 30, 20)
+            }
+            if(playerOne.lifes===3){
+                ctx.drawImage(life, 80, 220, 30, 20)
+            }
+        }
+    }
+
+    const drawLifesTwo = () => {
+        const life = new Image()
+        life.src = './images/life.png'
+        life.onload = () => {
+            if(playerTwo.lifes>=1){
+                ctx.drawImage(life, 890, 220, 30, 20)
+            }
+            if (playerTwo.lifes>=2){
+                ctx.drawImage(life, 920, 220, 30, 20)
+            }
+            if(playerTwo.lifes===3){
+                ctx.drawImage(life, 950, 220, 30, 20)
+            }
         }
     }
     

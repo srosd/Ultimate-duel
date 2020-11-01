@@ -7,8 +7,9 @@ body{
 }
 
 #one-win{
+    margin-top: 5vh;
     padding-top: 20vh;
-    padding-bottom: 40vh;
+    padding-bottom: 20vh;
     background-color: #000;
     color: blanchedalmond;
 }
@@ -21,8 +22,9 @@ body{
 }
 
 #two-win{
+    margin-top: 5vh;
     padding-top: 20vh;
-    padding-bottom: 40vh;
+    padding-bottom: 20vh;
     background-color: #000;
     color: blanchedalmond;
 }
