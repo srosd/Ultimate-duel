@@ -15,17 +15,19 @@ window.onload = () => {
     // CLASES ========================================
 
     class Player {
-        constructor(_x, _rightImageRoute, _leftImageRoute){
+        constructor(_x, _rightImageRoute, _middleImage, _leftImageRoute){
             this.x = _x
             this.y = 300
             this.width = 65
             this.height = 140
             this.imageRight = _rightImageRoute
+            this.imageMiddle = _middleImage
             this.imageLeft = _leftImageRoute
             this.alive = true
             this.lifes = 3
             this.direction = ''
             this.ammo = []
+            this.maxAmmo = 1
             this.movesCounter = 0
         }
 
@@ -53,8 +55,8 @@ window.onload = () => {
     
     // CREACIÓN DE LOS JUGADORES =====================
 
-    const playerOne = new Player(70, './images/playerOne-rightStep.png', './images/playerOne-leftStep.png')
-    const playerTwo = new Player(865, './images/playerTwo-rightStep.png', './images/playerTwo-leftStep.png')
+    const playerOne = new Player(70, './images/playerOne-rightStep.png', './images/playerOne-middleStep.png', './images/playerOne-leftStep.png')
+    const playerTwo = new Player(865, './images/playerTwo-rightStep.png', './images/playerTwo-middleStep.png', './images/playerTwo-leftStep.png')
     
     
     // FUNCIONES =====================================
@@ -65,7 +67,9 @@ window.onload = () => {
         drawCowboyTwo()
         drawCowboyOne()
         drawBulletsOne()
+        removeBulletOne()
         drawBulletsTwo()
+        removeBulletTwo()
         checkHurtOne()
         checkHurtTwo()
         drawLifesOne()
@@ -93,11 +97,31 @@ window.onload = () => {
     }
 
     const createBulletOne = () => {
-        playerOne.ammo.push(new Bullet(playerOne.x+65, playerOne.y+70))
+        if(playerOne.ammo.length<playerOne.maxAmmo){
+            playerOne.ammo.push(new Bullet(playerOne.x+65, playerOne.y+70))
+        }
+    }
+
+    const removeBulletOne = () => {
+        playerOne.ammo.forEach((bullet, index) => {
+            if(bullet.x >= 5000){
+                playerOne.ammo.splice(index, 1)
+            }
+        })
     }
 
     const createBulletTwo = () => {
+        if(playerTwo.ammo.length<playerTwo.maxAmmo){
         playerTwo.ammo.push(new Bullet(playerTwo.x, playerTwo.y+70))
+        }
+    }
+
+    const removeBulletTwo = () => {
+        playerTwo.ammo.forEach((bullet, index) => {
+            if(bullet.x <= -4000){
+                playerTwo.ammo.splice(index, 1)
+            }
+        })
     }
     
     const moveBulletsOne = () => {
@@ -113,10 +137,11 @@ window.onload = () => {
     }
 
     const drawBulletsOne = () => {
+        moveBulletsOne()
         for(i=0; i<playerOne.ammo.length; i++){
           drawRect(playerOne.ammo[i].x, playerOne.ammo[i].y, playerOne.ammo[i].width, playerOne.ammo[i].height, playerOne.ammo[i].color)
         }
-        moveBulletsOne()
+        // moveBulletsOne()
     }
 
     const drawBulletsTwo = () => {
@@ -126,7 +151,7 @@ window.onload = () => {
         moveBulletsTwo()
     }
 
-    checkHurtOne = () => {
+    const checkHurtOne = () => {
         playerTwo.ammo.forEach((bullet, index)=>{
             if(bullet.x+3 < playerOne.x+35 && bullet.x+3 > playerOne.x && bullet.y+3 > playerOne.y && bullet.y+3 < playerOne.y+140){
                 playerTwo.ammo.splice(index, 1)
@@ -137,7 +162,7 @@ window.onload = () => {
         })
     }
 
-    checkHurtTwo = () => {
+    const checkHurtTwo = () => {
         playerOne.ammo.forEach((bullet, index)=>{
             if(bullet.x+3 > playerTwo.x+32 && bullet.x+3 < playerTwo.x+65 && bullet.y+3 > playerTwo.y && bullet.y+3 < playerTwo.y+140){
                 playerOne.ammo.splice(index, 1)
@@ -175,14 +200,21 @@ window.onload = () => {
 
     const drawCowboyOne = () => {
 
-        if(playerOne.movesCounter%2===0){
+        if(playerOne.movesCounter===0){
             let cowboyOne = new Image()
             cowboyOne.src = playerOne.imageLeft
             cowboyOne.onload = () => {
                 ctx.drawImage(cowboyOne, playerOne.x, playerOne.y, playerOne.width, playerOne.height)
             }
         }
-        if(playerOne.movesCounter%2===1){
+        if(playerOne.movesCounter===1){
+            let cowboyOne = new Image()
+            cowboyOne.src = playerOne.imageMiddle
+            cowboyOne.onload = () => {
+                ctx.drawImage(cowboyOne, playerOne.x, playerOne.y, 83, playerOne.height)
+            }
+        }
+        if(playerOne.movesCounter===2){
             let cowboyOne = new Image()
             cowboyOne.src = playerOne.imageRight
             cowboyOne.onload = () => {
@@ -195,14 +227,21 @@ window.onload = () => {
     
     const drawCowboyTwo = () => {
 
-        if(playerTwo.movesCounter%2===0){
+        if(playerTwo.movesCounter===0){
             let cowboyTwo = new Image()
             cowboyTwo.src = playerTwo.imageLeft
             cowboyTwo.onload = () => {
                 ctx.drawImage(cowboyTwo, playerTwo.x, playerTwo.y, playerTwo.width, playerTwo.height)
             }
         }
-        if(playerTwo.movesCounter%2===1){
+        if(playerTwo.movesCounter===1){
+            let cowboyTwo = new Image()
+            cowboyTwo.src = playerTwo.imageMiddle
+            cowboyTwo.onload = () => {
+                ctx.drawImage(cowboyTwo, playerTwo.x, playerTwo.y, 83, playerTwo.height)
+            }
+        }
+        if(playerTwo.movesCounter===2){
             let cowboyTwo = new Image()
             cowboyTwo.src = playerTwo.imageRight
             cowboyTwo.onload = () => {
@@ -214,7 +253,11 @@ window.onload = () => {
     }
 
     const movePlayerOne = () => {
-        playerOne.movesCounter++
+        if(playerOne.movesCounter===2){
+            playerOne.movesCounter = 0
+        } else {
+            playerOne.movesCounter++
+        }
         if(playerOne.direction==='up' && playerOne.y > 160){
             // drawTown()
             playerOne.y-=30                                      // Velocidad fijada en 30px porque con keyup se mueven click a click
@@ -235,7 +278,11 @@ window.onload = () => {
     }
     
     const movePlayerTwo = () => {
-        playerTwo.movesCounter++
+        if(playerTwo.movesCounter===2){
+            playerTwo.movesCounter = 0
+        } else {
+            playerTwo.movesCounter++
+        }
         if(playerTwo.direction==='up' && playerTwo.y > 160){
             // drawTown()
             playerTwo.y-=30
@@ -276,13 +323,13 @@ window.onload = () => {
         life.src = './images/life.png'
         life.onload = () => {
             if(playerTwo.lifes>=1){
-                ctx.drawImage(life, 890, 220, 30, 20)
+                ctx.drawImage(life, 950, 220, 30, 20)
             }
             if (playerTwo.lifes>=2){
                 ctx.drawImage(life, 920, 220, 30, 20)
             }
             if(playerTwo.lifes===3){
-                ctx.drawImage(life, 950, 220, 30, 20)
+                ctx.drawImage(life, 890, 220, 30, 20)
             }
         }
     }
@@ -348,6 +395,9 @@ window.onload = () => {
     // INVOCACIONES ====================================
     
     updateCanvas()
+    // setInterval(()=>{
+    //     createBulletOne()
+    // }, 2000)
     
   
     
