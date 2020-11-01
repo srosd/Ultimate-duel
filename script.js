@@ -48,7 +48,7 @@ window.onload = () => {
             this.y = _y
             this.height = 7
             this.width = 7
-            this.color = 'red'
+            this.color = 'dimgray'
         }
     }
     
@@ -68,6 +68,7 @@ window.onload = () => {
         drawCowboyOne()
         drawBulletsOne()
         removeBulletOne()
+        displayMaxAmmoOne()
         drawBulletsTwo()
         removeBulletTwo()
         checkHurtOne()
@@ -150,6 +151,19 @@ window.onload = () => {
         }
         moveBulletsTwo()
     }
+
+    const displayMaxAmmoOne = () => {
+
+        // playerOne.ammo.forEach(()=>{
+
+        // })
+
+        if(playerOne.maxAmmo===1){
+            drawRect(30, 250, 10, 10, 'dimgray')
+        }
+    }
+
+    const displayMaxAmmoTwo = () => {}
 
     const checkHurtOne = () => {
         playerTwo.ammo.forEach((bullet, index)=>{
@@ -307,13 +321,13 @@ window.onload = () => {
         life.src = './images/life.png'
         life.onload = () => {
             if(playerOne.lifes>=1){
-                ctx.drawImage(life, 20, 220, 30, 20)
+                ctx.drawImage(life, 20, 565, 30, 20)
             }
             if (playerOne.lifes>=2){
-                ctx.drawImage(life, 50, 220, 30, 20)
+                ctx.drawImage(life, 50, 565, 30, 20)
             }
             if(playerOne.lifes===3){
-                ctx.drawImage(life, 80, 220, 30, 20)
+                ctx.drawImage(life, 80, 565, 30, 20)
             }
         }
     }
@@ -323,13 +337,13 @@ window.onload = () => {
         life.src = './images/life.png'
         life.onload = () => {
             if(playerTwo.lifes>=1){
-                ctx.drawImage(life, 950, 220, 30, 20)
+                ctx.drawImage(life, 950, 565, 30, 20)
             }
             if (playerTwo.lifes>=2){
-                ctx.drawImage(life, 920, 220, 30, 20)
+                ctx.drawImage(life, 920, 565, 30, 20)
             }
             if(playerTwo.lifes===3){
-                ctx.drawImage(life, 890, 220, 30, 20)
+                ctx.drawImage(life, 890, 565, 30, 20)
             }
         }
     }
@@ -395,12 +409,6 @@ window.onload = () => {
     // INVOCACIONES ====================================
     
     updateCanvas()
-    // setInterval(()=>{
-    //     createBulletOne()
-    // }, 2000)
-    
-  
-    
 
 }
 
