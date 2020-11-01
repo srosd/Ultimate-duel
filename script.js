@@ -29,6 +29,7 @@ window.onload = () => {
             this.ammo = []
             this.maxAmmo = 1
             this.movesCounter = 0
+            this.upgrade = []
         }
 
         receiveDamage(){
@@ -48,15 +49,24 @@ window.onload = () => {
             this.y = _y
             this.height = 7
             this.width = 7
-            this.color = 'dimgray'
+            this.color = 'black'
+        }
+    }
+
+    class Upgrade {
+        constructor(){
+            this.x
+            this.y
+            this.width
+            this.height
         }
     }
     
     
     // CREACIÓN DE LOS JUGADORES =====================
 
-    const playerOne = new Player(70, './images/playerOne-rightStep.png', './images/playerOne-middleStep.png', './images/playerOne-leftStep.png')
-    const playerTwo = new Player(865, './images/playerTwo-rightStep.png', './images/playerTwo-middleStep.png', './images/playerTwo-leftStep.png')
+    const playerOne = new Player(70, './images/Players/playerFour-rightStep.png', './images/Players/playerFour-middleStep.png', './images/Players/playerFour-leftStep.png')
+    const playerTwo = new Player(865, './images/Players/playerTwo-rightStep.png', './images/Players/playerTwo-middleStep.png', './images/Players/playerTwo-leftStep.png')
     
     
     // FUNCIONES =====================================
@@ -71,10 +81,12 @@ window.onload = () => {
         displayMaxAmmoOne()
         drawBulletsTwo()
         removeBulletTwo()
+        displayMaxAmmoTwo()
         checkHurtOne()
         checkHurtTwo()
         drawLifesOne()
         drawLifesTwo()
+        // checkMovesForUpgrade()
                 
         requestAnimationFrame(updateCanvas)
     }
@@ -82,7 +94,7 @@ window.onload = () => {
 
     const drawTown = () => {
         const town = new Image()
-        town.src = './images/background-canvas-image.jpg'
+        town.src = './images/Backgrounds/town_background.jpg'
         town.onload = () => {
             ctx.drawImage(town, 0, 0, 1000, 600)
         }
@@ -127,22 +139,21 @@ window.onload = () => {
     
     const moveBulletsOne = () => {
         playerOne.ammo.forEach((bullet)=>{ 
-            return bullet.x+=20
+            return bullet.x+=15
           })
     }
 
     const moveBulletsTwo = () => {
         playerTwo.ammo.forEach((bullet)=>{ 
-            return bullet.x-=20
+            return bullet.x-=15
           })
     }
 
     const drawBulletsOne = () => {
-        moveBulletsOne()
         for(i=0; i<playerOne.ammo.length; i++){
-          drawRect(playerOne.ammo[i].x, playerOne.ammo[i].y, playerOne.ammo[i].width, playerOne.ammo[i].height, playerOne.ammo[i].color)
+            drawRect(playerOne.ammo[i].x, playerOne.ammo[i].y, playerOne.ammo[i].width, playerOne.ammo[i].height, playerOne.ammo[i].color)
         }
-        // moveBulletsOne()
+        moveBulletsOne()
     }
 
     const drawBulletsTwo = () => {
@@ -153,22 +164,29 @@ window.onload = () => {
     }
 
     const displayMaxAmmoOne = () => {
-
-        // playerOne.ammo.forEach(()=>{
-
-        // })
-
+        ctx.fillStyle = 'black'
+        ctx.font = '20px Syne Mono'
         if(playerOne.maxAmmo===1){
-            drawRect(30, 250, 10, 10, 'dimgray')
+            ctx.fillText(`${playerOne.maxAmmo} shoot max`, 130, 581)
+        } else {
+            ctx.fillText(`${playerOne.maxAmmo} shoots max`, 130, 581)
         }
     }
 
-    const displayMaxAmmoTwo = () => {}
+    const displayMaxAmmoTwo = () => {
+        ctx.fillStyle = 'black'
+        ctx.font = '20px Syne Mono'
+        if(playerTwo.maxAmmo===1){
+            ctx.fillText(`${playerTwo.maxAmmo} shoot max`, 752, 581)
+        } else {
+            ctx.fillText(`${playerTwo.maxAmmo} shoots max`, 752, 581)
+        }
+    }
 
     const checkHurtOne = () => {
-        playerTwo.ammo.forEach((bullet, index)=>{
+        playerTwo.ammo.forEach((bullet)=>{
             if(bullet.x+3 < playerOne.x+35 && bullet.x+3 > playerOne.x && bullet.y+3 > playerOne.y && bullet.y+3 < playerOne.y+140){
-                playerTwo.ammo.splice(index, 1)
+                bullet.x -= 200
                 playerOne.receiveDamage()
                 playerOne.checkPlayerLifes()
                 checkEndOfGame()
@@ -177,9 +195,9 @@ window.onload = () => {
     }
 
     const checkHurtTwo = () => {
-        playerOne.ammo.forEach((bullet, index)=>{
+        playerOne.ammo.forEach((bullet)=>{
             if(bullet.x+3 > playerTwo.x+32 && bullet.x+3 < playerTwo.x+65 && bullet.y+3 > playerTwo.y && bullet.y+3 < playerTwo.y+140){
-                playerOne.ammo.splice(index, 1)
+                bullet.x += 200
                 playerTwo.receiveDamage()
                 playerTwo.checkPlayerLifes()
                 checkEndOfGame()
@@ -225,7 +243,7 @@ window.onload = () => {
             let cowboyOne = new Image()
             cowboyOne.src = playerOne.imageMiddle
             cowboyOne.onload = () => {
-                ctx.drawImage(cowboyOne, playerOne.x, playerOne.y, 83, playerOne.height)
+                ctx.drawImage(cowboyOne, playerOne.x, playerOne.y, 85, playerOne.height)
             }
         }
         if(playerOne.movesCounter===2){
@@ -284,7 +302,7 @@ window.onload = () => {
             // drawTown()
             playerOne.x-=30
             drawCowboyOne()
-        } else if (playerOne.direction==='right' && playerOne.x < 410){
+        } else if (playerOne.direction==='right' && playerOne.x < 400){
             // drawTown()
             playerOne.x+=30
             drawCowboyOne()
@@ -318,7 +336,7 @@ window.onload = () => {
 
     const drawLifesOne = () => {
         const life = new Image()
-        life.src = './images/life.png'
+        life.src = './images/Elements/life.png'
         life.onload = () => {
             if(playerOne.lifes>=1){
                 ctx.drawImage(life, 20, 565, 30, 20)
@@ -334,7 +352,7 @@ window.onload = () => {
 
     const drawLifesTwo = () => {
         const life = new Image()
-        life.src = './images/life.png'
+        life.src = './images/Elements/life.png'
         life.onload = () => {
             if(playerTwo.lifes>=1){
                 ctx.drawImage(life, 950, 565, 30, 20)
@@ -347,8 +365,50 @@ window.onload = () => {
             }
         }
     }
+
+    const upgradeBulletsOne = () => {
+        playerOne.maxAmmo++
+    }
+
+    const upgradeBulletsTwo = () => {
+        playerTwo.maxAmmo++
+    }
     
-    
+    const generateRandomUpgradeOne = () => {
+        const randomX = Math.floor(Math.random()*380)+70
+        const randomY = Math.floor(Math.random()*330)+220
+        // playerOne.upgrade.push(new Upgrade(randomX, randomY, 30, 30))
+        // playerOne.upgrade.forEach((upgrade)=>{
+
+            upgradeImage = new Image()
+            upgradeImage.src = './images/Elements/bullet.jpg'
+            upgradeImage.onload = () => {
+                ctx.drawImage(upgradeImage, randomX, randomY, 30, 30)
+            }
+            
+        // })
+    }
+
+    const drawUpgradesOne = () => {
+        // playerOne.upgrade.forEach((upgrade)=>{
+
+        //     upgradeImage = new Image()
+        //     upgradeImage.src = './images/Elements/bullet.jpg'
+        //     upgradeImage.onload = () => {
+        //         ctx.drawImage(upgradeImage, upgrade.x, upgrade.y, upgrade.width, upgrade.height)
+        //     }
+            
+        // })
+
+            
+    }
+
+    const checkMovesForUpgrade = () => {
+        if(playerOne.movesCounter%5===0){
+            generateRandomUpgradeOne()
+        }
+    }
+
     
     
     
@@ -400,7 +460,7 @@ window.onload = () => {
         }
     })
     
-    
+
 
 
     
@@ -409,7 +469,6 @@ window.onload = () => {
     // INVOCACIONES ====================================
     
     updateCanvas()
-
 }
 
 
