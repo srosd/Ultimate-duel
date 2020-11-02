@@ -76,6 +76,8 @@ window.onload = () => {
     
     // FUNCIONES =====================================
     
+    // -----------------------Bucle:
+
     const updateCanvas = () => {
         drawTown()
         drawDivision()
@@ -100,6 +102,8 @@ window.onload = () => {
     }
 
 
+    //--------------------Escenario:
+
     const drawTown = () => {
         const town = new Image()
         town.src = './images/Backgrounds/town_background.jpg'
@@ -115,60 +119,6 @@ window.onload = () => {
 
     const drawDivision = () => {
         drawRect(503, 200, 3, 400, 'sienna')
-    }
-
-    const createBulletOne = () => {
-        if(playerOne.ammo.length<playerOne.maxAmmo){
-            playerOne.ammo.push(new Bullet(playerOne.x+65, playerOne.y+70))
-        }
-    }
-
-    const removeBulletOne = () => {
-        playerOne.ammo.forEach((bullet, index) => {
-            if(bullet.x >= 5000){
-                playerOne.ammo.splice(index, 1)
-            }
-        })
-    }
-
-    const createBulletTwo = () => {
-        if(playerTwo.ammo.length<playerTwo.maxAmmo){
-        playerTwo.ammo.push(new Bullet(playerTwo.x, playerTwo.y+70))
-        }
-    }
-
-    const removeBulletTwo = () => {
-        playerTwo.ammo.forEach((bullet, index) => {
-            if(bullet.x <= -4000){
-                playerTwo.ammo.splice(index, 1)
-            }
-        })
-    }
-    
-    const moveBulletsOne = () => {
-        playerOne.ammo.forEach((bullet)=>{ 
-            return bullet.x+=15
-          })
-    }
-
-    const moveBulletsTwo = () => {
-        playerTwo.ammo.forEach((bullet)=>{ 
-            return bullet.x-=15
-          })
-    }
-
-    const drawBulletsOne = () => {
-        for(i=0; i<playerOne.ammo.length; i++){
-            drawRect(playerOne.ammo[i].x, playerOne.ammo[i].y, playerOne.ammo[i].width, playerOne.ammo[i].height, playerOne.ammo[i].color)
-        }
-        moveBulletsOne()
-    }
-
-    const drawBulletsTwo = () => {
-        for(i=0; i<playerTwo.ammo.length; i++){
-          drawRect(playerTwo.ammo[i].x, playerTwo.ammo[i].y, playerTwo.ammo[i].width, playerTwo.ammo[i].height, playerTwo.ammo[i].color)
-        }
-        moveBulletsTwo()
     }
 
     const displayMaxAmmoOne = () => {
@@ -191,53 +141,39 @@ window.onload = () => {
         }
     }
 
-    const checkHurtOne = () => {
-        playerTwo.ammo.forEach((bullet)=>{
-            if(bullet.x+3 < playerOne.x+35 && bullet.x+3 > playerOne.x && bullet.y > playerOne.y && bullet.y < playerOne.y+140){
-                bullet.x -= 200
-                playerOne.receiveDamage()
-                playerOne.checkPlayerLifes()
-                checkEndOfGame()
+    const drawLifesOne = () => {
+        const life = new Image()
+        life.src = './images/Elements/life.png'
+        life.onload = () => {
+            if(playerOne.lifes>=1){
+                ctx.drawImage(life, 20, 565, 30, 20)
             }
-        })
-    }
-
-    const checkHurtTwo = () => {
-        playerOne.ammo.forEach((bullet)=>{
-            if(bullet.x+3 > playerTwo.x+32 && bullet.x+3 < playerTwo.x+65 && bullet.y > playerTwo.y && bullet.y < playerTwo.y+140){
-                bullet.x += 200
-                playerTwo.receiveDamage()
-                playerTwo.checkPlayerLifes()
-                checkEndOfGame()
+            if (playerOne.lifes>=2){
+                ctx.drawImage(life, 50, 565, 30, 20)
             }
-        })
-    }
-
-
-    const checkEndOfGame = () => {
-        if(playerOne.alive===false || playerTwo.alive===false){
-            mainView.style.display = "none";
-            playerOne.ammo.length = 0
-            playerTwo.ammo.length = 0
-            playerOne.lifes = 3
-            playerTwo.lifes = 3
-            playerOne.x = 70
-            playerTwo.x = 865
-            playerOne.y = 300
-            playerTwo.y = 300
-            playerOne.maxAmmo = 1
-            playerTwo.maxAmmo = 1
-        }
-        if(playerOne.alive===false){
-            twoWin.style.display = "block";
-            playerOne.alive = true
-        }
-        if(playerTwo.alive===false){
-            oneWin.style.display = "block";
-            playerTwo.alive = true
+            if(playerOne.lifes===3){
+                ctx.drawImage(life, 80, 565, 30, 20)
+            }
         }
     }
 
+    const drawLifesTwo = () => {
+        const life = new Image()
+        life.src = './images/Elements/life.png'
+        life.onload = () => {
+            if(playerTwo.lifes>=1){
+                ctx.drawImage(life, 950, 565, 30, 20)
+            }
+            if (playerTwo.lifes>=2){
+                ctx.drawImage(life, 920, 565, 30, 20)
+            }
+            if(playerTwo.lifes===3){
+                ctx.drawImage(life, 890, 565, 30, 20)
+            }
+        }
+    }
+      
+    //-------------------Personajes:
 
     const drawCowboyOne = () => {
 
@@ -355,37 +291,65 @@ window.onload = () => {
         }
     }
 
-    const drawLifesOne = () => {
-        const life = new Image()
-        life.src = './images/Elements/life.png'
-        life.onload = () => {
-            if(playerOne.lifes>=1){
-                ctx.drawImage(life, 20, 565, 30, 20)
-            }
-            if (playerOne.lifes>=2){
-                ctx.drawImage(life, 50, 565, 30, 20)
-            }
-            if(playerOne.lifes===3){
-                ctx.drawImage(life, 80, 565, 30, 20)
-            }
+
+    //------------------------Balas:
+
+    const createBulletOne = () => {
+        if(playerOne.ammo.length<playerOne.maxAmmo){
+            playerOne.ammo.push(new Bullet(playerOne.x+65, playerOne.y+70))
         }
     }
 
-    const drawLifesTwo = () => {
-        const life = new Image()
-        life.src = './images/Elements/life.png'
-        life.onload = () => {
-            if(playerTwo.lifes>=1){
-                ctx.drawImage(life, 950, 565, 30, 20)
+    const removeBulletOne = () => {
+        playerOne.ammo.forEach((bullet, index) => {
+            if(bullet.x >= 5000){
+                playerOne.ammo.splice(index, 1)
             }
-            if (playerTwo.lifes>=2){
-                ctx.drawImage(life, 920, 565, 30, 20)
-            }
-            if(playerTwo.lifes===3){
-                ctx.drawImage(life, 890, 565, 30, 20)
-            }
+        })
+    }
+
+    const createBulletTwo = () => {
+        if(playerTwo.ammo.length<playerTwo.maxAmmo){
+        playerTwo.ammo.push(new Bullet(playerTwo.x, playerTwo.y+70))
         }
     }
+
+    const removeBulletTwo = () => {
+        playerTwo.ammo.forEach((bullet, index) => {
+            if(bullet.x <= -4000){
+                playerTwo.ammo.splice(index, 1)
+            }
+        })
+    }
+    
+    const moveBulletsOne = () => {
+        playerOne.ammo.forEach((bullet)=>{ 
+            return bullet.x+=15
+          })
+    }
+
+    const moveBulletsTwo = () => {
+        playerTwo.ammo.forEach((bullet)=>{ 
+            return bullet.x-=15
+          })
+    }
+
+    const drawBulletsOne = () => {
+        for(i=0; i<playerOne.ammo.length; i++){
+            drawRect(playerOne.ammo[i].x, playerOne.ammo[i].y, playerOne.ammo[i].width, playerOne.ammo[i].height, playerOne.ammo[i].color)
+        }
+        moveBulletsOne()
+    }
+
+    const drawBulletsTwo = () => {
+        for(i=0; i<playerTwo.ammo.length; i++){
+          drawRect(playerTwo.ammo[i].x, playerTwo.ammo[i].y, playerTwo.ammo[i].width, playerTwo.ammo[i].height, playerTwo.ammo[i].color)
+        }
+        moveBulletsTwo()
+    }
+
+
+    //----------------------Upgrades:
 
     const generateRandomUpgradeOne = () => {
         playerOne.upgrade.length = 0
@@ -446,6 +410,57 @@ window.onload = () => {
             generateRandomUpgradeTwo()
         }
     }
+
+
+    //-----------------Fin del juego:
+    
+    const checkHurtOne = () => {
+        playerTwo.ammo.forEach((bullet)=>{
+            if(bullet.x+3 < playerOne.x+35 && bullet.x+3 > playerOne.x && bullet.y > playerOne.y && bullet.y < playerOne.y+140){
+                bullet.x -= 200
+                playerOne.receiveDamage()
+                playerOne.checkPlayerLifes()
+                checkEndOfGame()
+            }
+        })
+    }
+
+    const checkHurtTwo = () => {
+        playerOne.ammo.forEach((bullet)=>{
+            if(bullet.x+3 > playerTwo.x+32 && bullet.x+3 < playerTwo.x+65 && bullet.y > playerTwo.y && bullet.y < playerTwo.y+140){
+                bullet.x += 200
+                playerTwo.receiveDamage()
+                playerTwo.checkPlayerLifes()
+                checkEndOfGame()
+            }
+        })
+    }
+
+    const checkEndOfGame = () => {
+        if(playerOne.alive===false || playerTwo.alive===false){
+            mainView.style.display = "none";
+            playerOne.ammo.length = 0
+            playerTwo.ammo.length = 0
+            playerOne.lifes = 3
+            playerTwo.lifes = 3
+            playerOne.x = 70
+            playerTwo.x = 865
+            playerOne.y = 300
+            playerTwo.y = 300
+            playerOne.maxAmmo = 1
+            playerTwo.maxAmmo = 1
+        }
+        if(playerOne.alive===false){
+            twoWin.style.display = "block";
+            playerOne.alive = true
+        }
+        if(playerTwo.alive===false){
+            oneWin.style.display = "block";
+            playerTwo.alive = true
+        }
+    }
+
+    
     
     // EVENT LISTENERS =================================
     
@@ -495,10 +510,6 @@ window.onload = () => {
         }
     })
     
-
-
-
-    
     
     
     // INVOCACIONES ====================================
@@ -508,6 +519,7 @@ window.onload = () => {
     updateCanvas()
     setInterval(generateRandomUpgradeOne, 7000)  // El valor de este intervalo nos dice cada cuanto cambiará de posición la upgrade
     setInterval(generateRandomUpgradeTwo, 7000)
+    
 }
 
 
