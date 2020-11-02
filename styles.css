@@ -3,16 +3,26 @@ body{
     font-family: 'Syne Mono', monospace;
 }
 
+#startview{
+    width: 1000px;
+    height: 600px;
+    background-color: darkorchid;
+    position: absolute;
+    top: 73px;
+    left: 310px;
+}
+
 #canvas{
     border: 1px solid black;
 }
 
 #one-win{
     margin-top: 5vh;
-    padding-top: 20vh;
-    padding-bottom: 20vh;
+    padding-top: 15vh;
+    padding-bottom: 10vh;
     background-color: #000;
     color: blanchedalmond;
+    display: none;
 }
 #one-win iframe{
     margin-bottom: 4vh;
@@ -24,10 +34,11 @@ body{
 
 #two-win{
     margin-top: 5vh;
-    padding-top: 20vh;
-    padding-bottom: 20vh;
+    padding-top: 15vh;
+    padding-bottom: 10vh;
     background-color: #000;
     color: blanchedalmond;
+    display: none;
 }
 #two-win iframe{
     margin-bottom: 4vh;
@@ -35,5 +46,43 @@ body{
 
 #two-win h1{
     font-size: 70px;
+}
+
+#magikarp{
+    width: 150px;
+    position: absolute;
+    top: 38.5vh;
+    left: 46vw;
+    display: none;
+}
+
+#far-west-transition{
+    background-color: #000;
+    position: absolute;
+    top: 3vh;
+    left: 20.5vw;
+    width: 1000px;
+    height: 600px;
+    display: none;
+}
+
+#far-west-transition iframe{
+    background-color: #000;
+    margin-top: 160px;
+}
+
+#star-wars-transition{
+    background-color: #000;
+    position: absolute;
+    top: 3vh;
+    left: 20.5vw;
+    width: 1000px;
+    height: 600px;
+    display: none;
+}
+
+#star-wars-transition iframe{
+    background-color: #000;
+    margin-top: 160px;
 }
 

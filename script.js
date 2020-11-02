@@ -8,7 +8,12 @@ window.onload = () => {
     const oneWin = document.getElementById('one-win')
     const twoWin = document.getElementById('two-win')
     const restart = document.getElementsByClassName('restart')
+    const magikarp = document.getElementById('magikarp')
+    const farWestTransition = document.getElementById('far-west-transition')
+    const starWarsTransition = document.getElementById('star-wars-transition')
     const restartArr = [...restart]
+    const backgroundImages = ['./images/Backgrounds/town_background.jpg', './images/Backgrounds/morpheus.png', './images/Backgrounds/starwars-bg.png']
+    let backgroundCounter = 0
     
    
     
@@ -70,7 +75,7 @@ window.onload = () => {
     
     // CREACIÓN DE LOS JUGADORES =====================
 
-    const playerOne = new Player(70, './images/Players/playerFour-rightStep.png', './images/Players/playerFour-middleStep.png', './images/Players/playerFour-leftStep.png')
+    const playerOne = new Player(70, './images/Players/playerFour-leftStep.png', './images/Players/playerFour-middleStep.png', './images/Players/playerFour-rightStep.png')
     const playerTwo = new Player(865, './images/Players/playerTwo-rightStep.png', './images/Players/playerTwo-middleStep.png', './images/Players/playerTwo-leftStep.png')
     
     
@@ -79,20 +84,9 @@ window.onload = () => {
     // -----------------------Bucle:
 
     const updateCanvas = () => {
-        drawTown()
-        drawDivision()
-        drawCowboyTwo()
-        drawCowboyOne()
-        drawBulletsOne()
-        removeBulletOne()
-        displayMaxAmmoOne()
-        drawBulletsTwo()
-        removeBulletTwo()
-        displayMaxAmmoTwo()
+        selectTheme()
         checkHurtOne()
         checkHurtTwo()
-        drawLifesOne()
-        drawLifesTwo()
         checkMovesForUpgradeOne()
         checkMovesForUpgradeTwo()
         checkUpgradeCatchOne()
@@ -104,11 +98,61 @@ window.onload = () => {
 
     //--------------------Escenario:
 
+    const selectTheme = () => {
+        if(backgroundCounter===0){
+            drawMorpheus()
+        } else if (backgroundCounter<0){
+            drawTown()
+            drawDivision()
+            drawPlayerTwo()
+            drawPlayerOne()
+            drawBulletsOne()
+            removeBulletOne()
+            displayMaxAmmoOne()
+            drawBulletsTwo()
+            removeBulletTwo()
+            displayMaxAmmoTwo()
+            drawLifesOne()
+            drawLifesTwo()
+            showMagikarp()
+        } else if (backgroundCounter>0){
+            drawSpace()
+            drawDivision()
+            drawPlayerTwo()
+            drawPlayerOne()
+            drawBulletsOne()
+            removeBulletOne()
+            displayMaxAmmoOne()
+            drawBulletsTwo()
+            removeBulletTwo()
+            displayMaxAmmoTwo()
+            drawLifesOne()
+            drawLifesTwo()
+            showMagikarp()
+        }
+    }
+
     const drawTown = () => {
         const town = new Image()
-        town.src = './images/Backgrounds/town_background.jpg'
+        town.src = backgroundImages[0]
         town.onload = () => {
             ctx.drawImage(town, 0, 0, 1000, 600)
+        }
+    }
+
+    const drawSpace = () => {
+        const space = new Image()
+        space.src = backgroundImages[2]
+        space.onload = () => {
+            ctx.drawImage(space, 0, 0, 1000, 600)
+        }
+    }
+
+    const drawMorpheus = () => {
+        const morpheus = new Image()
+        morpheus.src = backgroundImages[1]
+        morpheus.onload = () => {
+            ctx.drawImage(morpheus, 0, 0, 1000, 600)
         }
     }
 
@@ -175,7 +219,7 @@ window.onload = () => {
       
     //-------------------Personajes:
 
-    const drawCowboyOne = () => {
+    const drawPlayerOne = () => {
 
         if(playerOne.movesCounter===0){
             let cowboyOne = new Image()
@@ -202,7 +246,7 @@ window.onload = () => {
 
     }
     
-    const drawCowboyTwo = () => {
+    const drawPlayerTwo = () => {
 
         if(playerTwo.movesCounter===0){
             let cowboyTwo = new Image()
@@ -235,27 +279,29 @@ window.onload = () => {
         } else {
             playerOne.movesCounter++
         }
+
         if(playerOne.movesCounterUpgrades===50){    // Este movesCounterUpgrades se utiliza para mostrar upgrades a intervalos de pasos
             playerOne.movesCounterUpgrades = 0
         } else {
             playerOne.movesCounterUpgrades++
         }
+        
         if(playerOne.direction==='up' && playerOne.y > 160){
             // drawTown()
             playerOne.y-=30                                      // Velocidad fijada en 30px porque con keyup se mueven click a click
-            drawCowboyOne()
+            drawPlayerOne()
         } else if (playerOne.direction==='down' && playerOne.y < 450){
             // drawTown()
             playerOne.y+=30
-            drawCowboyOne()
+            drawPlayerOne()
         } else if (playerOne.direction==='left' && playerOne.x > 50){
             // drawTown()
             playerOne.x-=30
-            drawCowboyOne()
+            drawPlayerOne()
         } else if (playerOne.direction==='right' && playerOne.x < 400){
             // drawTown()
             playerOne.x+=30
-            drawCowboyOne()
+            drawPlayerOne()
         }
     }
     
@@ -275,19 +321,25 @@ window.onload = () => {
         if(playerTwo.direction==='up' && playerTwo.y > 160){
             // drawTown()
             playerTwo.y-=30
-            drawCowboyTwo()
+            drawPlayerTwo()
         } else if (playerTwo.direction==='down' && playerTwo.y < 450){
             // drawTown()
             playerTwo.y+=30
-            drawCowboyTwo()
+            drawPlayerTwo()
         } else if (playerTwo.direction==='left' && playerTwo.x > 535){
             // drawTown()
             playerTwo.x-=30
-            drawCowboyTwo()
+            drawPlayerTwo()
         } else if (playerTwo.direction==='right' && playerTwo.x < 885){
             // drawTown()
             playerTwo.x+=30
-            drawCowboyTwo()
+            drawPlayerTwo()
+        }
+    }
+
+    const showMagikarp = () => {
+        if(playerOne.lifes===2 && playerTwo.lifes===2){
+            magikarp.style.display = "block";
         }
     }
 
@@ -398,14 +450,14 @@ window.onload = () => {
     }
 
     const checkUpgradeCatchOne = () => {
-        if(playerOne.upgrade[0].x+20 > playerOne.x && playerOne.upgrade[0].x+20 < playerOne.x+65 && playerOne.upgrade[0].y+20 > playerOne.y && playerOne.upgrade[0].y+20 < playerOne.y+140){
+        if(playerOne.upgrade[0].x+20 > playerOne.x && playerOne.upgrade[0].x+20 < playerOne.x+65 && playerOne.upgrade[0].y+20 > playerOne.y && playerOne.upgrade[0].y+20 < playerOne.y+140 && playerOne.movesCounterUpgrades>20 && playerOne.movesCounterUpgrades<40){
             playerOne.upgradeAmmo()
             generateRandomUpgradeOne()
         }
     }
 
     const checkUpgradeCatchTwo = () => {
-        if(playerTwo.upgrade[0].x+20 > playerTwo.x && playerTwo.upgrade[0].x+20 < playerTwo.x+65 && playerTwo.upgrade[0].y+20 > playerTwo.y && playerTwo.upgrade[0].y+20 < playerTwo.y+140){
+        if(playerTwo.upgrade[0].x+20 > playerTwo.x && playerTwo.upgrade[0].x+20 < playerTwo.x+65 && playerTwo.upgrade[0].y+20 > playerTwo.y && playerTwo.upgrade[0].y+20 < playerTwo.y+140 && playerTwo.movesCounterUpgrades>20 && playerTwo.movesCounterUpgrades<40){
             playerTwo.upgradeAmmo()
             generateRandomUpgradeTwo()
         }
@@ -416,7 +468,7 @@ window.onload = () => {
     
     const checkHurtOne = () => {
         playerTwo.ammo.forEach((bullet)=>{
-            if(bullet.x+3 < playerOne.x+35 && bullet.x+3 > playerOne.x && bullet.y > playerOne.y && bullet.y < playerOne.y+140){
+            if(bullet.x+3 < playerOne.x+35 && bullet.x+3 > playerOne.x && bullet.y > playerOne.y+15 && bullet.y < playerOne.y+120){
                 bullet.x -= 200
                 playerOne.receiveDamage()
                 playerOne.checkPlayerLifes()
@@ -427,7 +479,7 @@ window.onload = () => {
 
     const checkHurtTwo = () => {
         playerOne.ammo.forEach((bullet)=>{
-            if(bullet.x+3 > playerTwo.x+32 && bullet.x+3 < playerTwo.x+65 && bullet.y > playerTwo.y && bullet.y < playerTwo.y+140){
+            if(bullet.x+3 > playerTwo.x+32 && bullet.x+3 < playerTwo.x+65 && bullet.y > playerTwo.y+15 && bullet.y < playerTwo.y+120){
                 bullet.x += 200
                 playerTwo.receiveDamage()
                 playerTwo.checkPlayerLifes()
@@ -436,10 +488,8 @@ window.onload = () => {
         })
     }
 
-    const checkEndOfGame = () => {
-        if(playerOne.alive===false || playerTwo.alive===false){
-            mainView.style.display = "none";
-            playerOne.ammo.length = 0
+    const resetValues = () => {
+        playerOne.ammo.length = 0
             playerTwo.ammo.length = 0
             playerOne.lifes = 3
             playerTwo.lifes = 3
@@ -449,6 +499,20 @@ window.onload = () => {
             playerTwo.y = 300
             playerOne.maxAmmo = 1
             playerTwo.maxAmmo = 1
+            playerOne.direction = ''
+            playerTwo.direction = ''
+            playerOne.movesCounter = 0
+            playerOne.movesCounterUpgrades = 0
+            playerTwo.movesCounter = 0
+            playerTwo.movesCounterUpgrades = 0
+            backgroundCounter = 0
+            magikarp.style.display = "none";
+    }
+
+    const checkEndOfGame = () => {
+        if(playerOne.alive===false || playerTwo.alive===false){
+            mainView.style.display = "none";
+            resetValues()
         }
         if(playerOne.alive===false){
             twoWin.style.display = "block";
@@ -461,7 +525,6 @@ window.onload = () => {
     }
 
     
-    
     // EVENT LISTENERS =================================
     
     document.addEventListener('keyup', (event)=>{     // Se utiliza keyup para evitar que un jugador mantenga su flecha apretada e impida el movimiento del otro
@@ -472,17 +535,37 @@ window.onload = () => {
             playerTwo.direction = 'down'
             movePlayerTwo()
         } else if(event.key === 'w'){
-            playerTwo.direction = 'up'
+            playerOne.direction = 'up'
             movePlayerOne()
         } else if(event.key === 's'){
             playerOne.direction = 'down'
             movePlayerOne()
         } else if(event.key === 'ArrowLeft'){
-            playerTwo.direction = 'left'
-            movePlayerTwo()
+            if(backgroundCounter!==0){
+                playerTwo.direction = 'left'
+                movePlayerTwo()
+            } else {
+                farWestTransition.style.display = "block"
+                setTimeout(()=>{
+                    farWestTransition.style.display = "none"
+                }, 4300)
+                setTimeout(()=>{
+                    backgroundCounter = -1
+                }, 4200)
+            }
         } else if(event.key === 'ArrowRight'){
-            playerTwo.direction = 'right'
-            movePlayerTwo()
+            if(backgroundCounter!==0){
+                playerTwo.direction = 'right'
+                movePlayerTwo()
+            } else {
+                starWarsTransition.style.display = "block"
+                setTimeout(()=>{
+                    starWarsTransition.style.display = "none"
+                }, 4200)
+                setTimeout(()=>{
+                    backgroundCounter = 1
+                }, 4100)
+            }
         } else if(event.key === 'a'){
             playerOne.direction = 'left'
             movePlayerOne()
@@ -500,8 +583,6 @@ window.onload = () => {
         }
     })
 
-
-    
     restartArr.forEach((button)=>{
         button.onclick = () => {
             mainView.style.display = "block";
@@ -511,15 +592,14 @@ window.onload = () => {
     })
     
     
-    
     // INVOCACIONES ====================================
-    
+
     generateRandomUpgradeOne()
-    generateRandomUpgradeTwo()
-    updateCanvas()
-    setInterval(generateRandomUpgradeOne, 7000)  // El valor de este intervalo nos dice cada cuanto cambiará de posición la upgrade
-    setInterval(generateRandomUpgradeTwo, 7000)
-    
+        generateRandomUpgradeTwo()
+        updateCanvas()
+        setInterval(generateRandomUpgradeOne, 7000)  // El valor de este intervalo nos dice cada cuanto cambiará de posición la upgrade
+        setInterval(generateRandomUpgradeTwo, 7000)
+
 }
 
 
