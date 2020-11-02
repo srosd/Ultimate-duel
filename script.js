@@ -29,6 +29,7 @@ window.onload = () => {
             this.ammo = []
             this.maxAmmo = 1
             this.movesCounter = 0
+            this.movesCounterUpgrades = 0
             this.upgrade = []
         }
 
@@ -41,24 +42,28 @@ window.onload = () => {
                 this.alive = false
             }
         }
+
+        upgradeAmmo(){
+            this.maxAmmo++
+        }
     } 
 
     class Bullet {
         constructor(_x, _y){
             this.x = _x
             this.y = _y
-            this.height = 7
-            this.width = 7
+            this.height = 3
+            this.width = 14
             this.color = 'black'
         }
     }
 
     class Upgrade {
-        constructor(){
-            this.x
-            this.y
-            this.width
-            this.height
+        constructor(_x, _y, _width, _height){
+            this.x = _x
+            this.y = _y
+            this.width = _width
+            this.height = _height
         }
     }
     
@@ -86,7 +91,10 @@ window.onload = () => {
         checkHurtTwo()
         drawLifesOne()
         drawLifesTwo()
-        // checkMovesForUpgrade()
+        checkMovesForUpgradeOne()
+        checkMovesForUpgradeTwo()
+        checkUpgradeCatchOne()
+        checkUpgradeCatchTwo()
                 
         requestAnimationFrame(updateCanvas)
     }
@@ -167,9 +175,9 @@ window.onload = () => {
         ctx.fillStyle = 'black'
         ctx.font = '20px Syne Mono'
         if(playerOne.maxAmmo===1){
-            ctx.fillText(`${playerOne.maxAmmo} shoot max`, 130, 581)
+            ctx.fillText(`${playerOne.maxAmmo} shoot max`, 122, 581)
         } else {
-            ctx.fillText(`${playerOne.maxAmmo} shoots max`, 130, 581)
+            ctx.fillText(`${playerOne.maxAmmo} shoots max`, 122, 581)
         }
     }
 
@@ -179,13 +187,13 @@ window.onload = () => {
         if(playerTwo.maxAmmo===1){
             ctx.fillText(`${playerTwo.maxAmmo} shoot max`, 752, 581)
         } else {
-            ctx.fillText(`${playerTwo.maxAmmo} shoots max`, 752, 581)
+            ctx.fillText(`${playerTwo.maxAmmo} shoots max`, 740, 581)
         }
     }
 
     const checkHurtOne = () => {
         playerTwo.ammo.forEach((bullet)=>{
-            if(bullet.x+3 < playerOne.x+35 && bullet.x+3 > playerOne.x && bullet.y+3 > playerOne.y && bullet.y+3 < playerOne.y+140){
+            if(bullet.x+3 < playerOne.x+35 && bullet.x+3 > playerOne.x && bullet.y > playerOne.y && bullet.y < playerOne.y+140){
                 bullet.x -= 200
                 playerOne.receiveDamage()
                 playerOne.checkPlayerLifes()
@@ -196,7 +204,7 @@ window.onload = () => {
 
     const checkHurtTwo = () => {
         playerOne.ammo.forEach((bullet)=>{
-            if(bullet.x+3 > playerTwo.x+32 && bullet.x+3 < playerTwo.x+65 && bullet.y+3 > playerTwo.y && bullet.y+3 < playerTwo.y+140){
+            if(bullet.x+3 > playerTwo.x+32 && bullet.x+3 < playerTwo.x+65 && bullet.y > playerTwo.y && bullet.y < playerTwo.y+140){
                 bullet.x += 200
                 playerTwo.receiveDamage()
                 playerTwo.checkPlayerLifes()
@@ -207,24 +215,25 @@ window.onload = () => {
 
 
     const checkEndOfGame = () => {
-        if(playerOne.alive===false){
+        if(playerOne.alive===false || playerTwo.alive===false){
             mainView.style.display = "none";
-            twoWin.style.display = "block";
             playerOne.ammo.length = 0
             playerTwo.ammo.length = 0
             playerOne.lifes = 3
             playerTwo.lifes = 3
+            playerOne.x = 70
+            playerTwo.x = 865
+            playerOne.y = 300
+            playerTwo.y = 300
+            playerOne.maxAmmo = 1
+            playerTwo.maxAmmo = 1
+        }
+        if(playerOne.alive===false){
+            twoWin.style.display = "block";
             playerOne.alive = true
-            playerTwo.alive = true
         }
         if(playerTwo.alive===false){
-            mainView.style.display = "none";
             oneWin.style.display = "block";
-            playerOne.ammo.length = 0
-            playerTwo.ammo.length = 0
-            playerOne.lifes = 3
-            playerTwo.lifes = 3
-            playerOne.alive = true
             playerTwo.alive = true
         }
     }
@@ -285,10 +294,15 @@ window.onload = () => {
     }
 
     const movePlayerOne = () => {
-        if(playerOne.movesCounter===2){
+        if(playerOne.movesCounter===2){   // Este movesCounter sirve para mover los spriters
             playerOne.movesCounter = 0
         } else {
             playerOne.movesCounter++
+        }
+        if(playerOne.movesCounterUpgrades===50){    // Este movesCounterUpgrades se utiliza para mostrar upgrades a intervalos de pasos
+            playerOne.movesCounterUpgrades = 0
+        } else {
+            playerOne.movesCounterUpgrades++
         }
         if(playerOne.direction==='up' && playerOne.y > 160){
             // drawTown()
@@ -315,6 +329,13 @@ window.onload = () => {
         } else {
             playerTwo.movesCounter++
         }
+
+        if(playerTwo.movesCounterUpgrades===50){
+            playerTwo.movesCounterUpgrades = 0
+        } else {
+            playerTwo.movesCounterUpgrades++
+        }
+
         if(playerTwo.direction==='up' && playerTwo.y > 160){
             // drawTown()
             playerTwo.y-=30
@@ -366,51 +387,65 @@ window.onload = () => {
         }
     }
 
-    const upgradeBulletsOne = () => {
-        playerOne.maxAmmo++
-    }
-
-    const upgradeBulletsTwo = () => {
-        playerTwo.maxAmmo++
-    }
-    
     const generateRandomUpgradeOne = () => {
-        const randomX = Math.floor(Math.random()*380)+70
-        const randomY = Math.floor(Math.random()*330)+220
-        // playerOne.upgrade.push(new Upgrade(randomX, randomY, 30, 30))
-        // playerOne.upgrade.forEach((upgrade)=>{
+        playerOne.upgrade.length = 0
+        const randomX = Math.floor(Math.random()*370)+30      // Estos numeros ajustan la superficie en la que podrán aparecer upgrades
+        const randomY = Math.floor(Math.random()*310)+220
+        playerOne.upgrade.push(new Upgrade(randomX, randomY, 40, 40))
+    }
 
-            upgradeImage = new Image()
-            upgradeImage.src = './images/Elements/bullet.jpg'
-            upgradeImage.onload = () => {
-                ctx.drawImage(upgradeImage, randomX, randomY, 30, 30)
-            }
-            
-        // })
+    const generateRandomUpgradeTwo = () => {
+        playerTwo.upgrade.length = 0
+        const randomX = Math.floor(Math.random()*370)+570
+        const randomY = Math.floor(Math.random()*310)+220
+        playerTwo.upgrade.push(new Upgrade(randomX, randomY, 40, 40))
     }
 
     const drawUpgradesOne = () => {
-        // playerOne.upgrade.forEach((upgrade)=>{
-
-        //     upgradeImage = new Image()
-        //     upgradeImage.src = './images/Elements/bullet.jpg'
-        //     upgradeImage.onload = () => {
-        //         ctx.drawImage(upgradeImage, upgrade.x, upgrade.y, upgrade.width, upgrade.height)
-        //     }
-            
-        // })
-
-            
+        if(playerOne.upgrade.length>0){
+            upgradeImage = new Image()
+            upgradeImage.src = './images/Elements/upgrade.png'
+            upgradeImage.onload = () => {
+                ctx.drawImage(upgradeImage, playerOne.upgrade[0].x, playerOne.upgrade[0].y, playerOne.upgrade[0].width, playerOne.upgrade[0].height)
+            }
+        }
     }
 
-    const checkMovesForUpgrade = () => {
-        if(playerOne.movesCounter%5===0){
+    const drawUpgradesTwo = () => {
+        if(playerTwo.upgrade.length>0){
+            upgradeImage = new Image()
+            upgradeImage.src = './images/Elements/upgrade.png'
+            upgradeImage.onload = () => {
+                ctx.drawImage(upgradeImage, playerTwo.upgrade[0].x, playerTwo.upgrade[0].y, playerTwo.upgrade[0].width, playerTwo.upgrade[0].height)
+            }
+        }
+    }
+
+    const checkMovesForUpgradeOne = () => {
+        if(playerOne.movesCounterUpgrades>20 && playerOne.movesCounterUpgrades<40){  // Aquí se define en que intervalos aparecerán upgrades y en cuales no
+            drawUpgradesOne()
+        }
+    }
+
+    const checkMovesForUpgradeTwo = () => {
+        if(playerTwo.movesCounterUpgrades>20 && playerTwo.movesCounterUpgrades<40){  // Aquí se define en que intervalos aparecerán upgrades y en cuales no
+            drawUpgradesTwo()
+        }
+    }
+
+    const checkUpgradeCatchOne = () => {
+        if(playerOne.upgrade[0].x+20 > playerOne.x && playerOne.upgrade[0].x+20 < playerOne.x+65 && playerOne.upgrade[0].y+20 > playerOne.y && playerOne.upgrade[0].y+20 < playerOne.y+140){
+            playerOne.upgradeAmmo()
             generateRandomUpgradeOne()
         }
     }
 
-    
-    
+    const checkUpgradeCatchTwo = () => {
+        if(playerTwo.upgrade[0].x+20 > playerTwo.x && playerTwo.upgrade[0].x+20 < playerTwo.x+65 && playerTwo.upgrade[0].y+20 > playerTwo.y && playerTwo.upgrade[0].y+20 < playerTwo.y+140){
+            playerTwo.upgradeAmmo()
+            generateRandomUpgradeTwo()
+        }
+    }
     
     // EVENT LISTENERS =================================
     
@@ -422,7 +457,7 @@ window.onload = () => {
             playerTwo.direction = 'down'
             movePlayerTwo()
         } else if(event.key === 'w'){
-            playerOne.direction = 'up'
+            playerTwo.direction = 'up'
             movePlayerOne()
         } else if(event.key === 's'){
             playerOne.direction = 'down'
@@ -468,7 +503,11 @@ window.onload = () => {
     
     // INVOCACIONES ====================================
     
+    generateRandomUpgradeOne()
+    generateRandomUpgradeTwo()
     updateCanvas()
+    setInterval(generateRandomUpgradeOne, 7000)  // El valor de este intervalo nos dice cada cuanto cambiará de posición la upgrade
+    setInterval(generateRandomUpgradeTwo, 7000)
 }
 
 
