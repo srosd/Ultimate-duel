@@ -1,4 +1,4 @@
-# far-west-duel
+# Ultimate Duel
 
 ## Goal of the game
 You must kill your opponent before he does the same with you. You have three lifes which you will lose if you're reached by one of your opponent bullets.
