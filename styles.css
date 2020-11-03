@@ -49,10 +49,10 @@ body{
 }
 
 #magikarp{
-    width: 150px;
+    width: 180px;
     position: absolute;
-    top: 38.5vh;
-    left: 46vw;
+    top: 340px;
+    left: 45vw;
     display: none;
 }
 
@@ -60,10 +60,10 @@ body{
     background-color: #000;
     position: absolute;
     top: 3vh;
-    left: 20.5vw;
-    width: 1000px;
-    height: 600px;
+    width: 100vw;
+    height: 96vh;
     display: none;
+    margin-top: 0;
 }
 
 #far-west-transition iframe{
@@ -75,10 +75,10 @@ body{
     background-color: #000;
     position: absolute;
     top: 3vh;
-    left: 20.5vw;
-    width: 1000px;
-    height: 600px;
+    width: 100vw;
+    height: 96vh;
     display: none;
+    margin-top: 0;
 }
 
 #star-wars-transition iframe{

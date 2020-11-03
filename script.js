@@ -1,6 +1,6 @@
 window.onload = () => {
 
-    // TARGETS ======================================
+    // TARGETS Y VARIABLES ==========================
 
     const canvas = document.getElementById('canvas')
     const ctx = canvas.getContext('2d')
@@ -11,8 +11,28 @@ window.onload = () => {
     const magikarp = document.getElementById('magikarp')
     const farWestTransition = document.getElementById('far-west-transition')
     const starWarsTransition = document.getElementById('star-wars-transition')
+    const soundOnButton = document.getElementById('on')
+    const soundOffButton = document.getElementById('off')
+    const farWestTransitionAudio = new Audio('./audio/farwest-transition (mp3cut.net).mp3')
+    farWestTransitionAudio.volume = .3
+    const farWestDuelAudio = new Audio('./audio/farwest-duel (mp3cut.net).mp3')
+    farWestDuelAudio.loop = true
+    farWestDuelAudio.volume = .05
+    const farWestWinAudio = new Audio('./audio/farwest-win (mp3cut.net).mp3')
+    farWestWinAudio.volume = .2
+    const farWestShootAudioOne = new Audio('./audio/western-ricochet.mp3')
+    farWestShootAudioOne.volume = .1
+    const farWestShootAudioTwo = new Audio('./audio/western-ricochet.mp3')
+    farWestShootAudioTwo.volume = .1
+    const starWarsTransitionAudio = new Audio('./audio/Meco - Star Wars and Other Galactic Funk_ Star Wars (HD Vinyl Recording) (mp3cut.net).mp3')
+    starWarsTransitionAudio.volume = .3
+    const starWarsDuelAudio = new Audio('./audio/John Williams - Duel of the Fates (Star Wars Soundtrack) [HQ] (mp3cut.net).mp3')
+    starWarsDuelAudio.loop = true
+    starWarsDuelAudio.volume = .2
+    const starWarsTwoWinAudio = new Audio("./audio/Star Wars- The Imperial March (Darth Vader's Theme) (mp3cut.net).mp3")
+    starWarsTwoWinAudio.volume = .5
     const restartArr = [...restart]
-    const backgroundImages = ['./images/Backgrounds/town_background.jpg', './images/Backgrounds/morpheus.png', './images/Backgrounds/starwars-bg.png']
+    const backgroundImages = ['./images/Backgrounds/town_background.jpg', './images/Backgrounds/selection_page.jpg', './images/Backgrounds/starwars-bg.png']
     let backgroundCounter = 0
     
    
@@ -100,7 +120,7 @@ window.onload = () => {
 
     const selectTheme = () => {
         if(backgroundCounter===0){
-            drawMorpheus()
+            drawSelectPage()
         } else if (backgroundCounter<0){
             drawTown()
             drawDivision()
@@ -148,12 +168,19 @@ window.onload = () => {
         }
     }
 
-    const drawMorpheus = () => {
-        const morpheus = new Image()
-        morpheus.src = backgroundImages[1]
-        morpheus.onload = () => {
-            ctx.drawImage(morpheus, 0, 0, 1000, 600)
+    const drawSelectPage = () => {
+        const selectPage = new Image()
+        selectPage.src = backgroundImages[1]
+        selectPage.onload = () => {
+            ctx.drawImage(selectPage, 0, 0, 1000, 600)
         }
+        ctx.fillStyle = 'black'
+        ctx.font = '25px Syne Mono'
+        ctx.fillText('ARROW LEFT', 50, 50)
+
+        ctx.fillStyle = 'white'
+        ctx.font = '25px Syne Mono'
+        ctx.fillText('ARROW RIGHT', 780, 50)
     }
 
     const drawRect = (x, y, width, height, _color) => {
@@ -162,7 +189,11 @@ window.onload = () => {
       }
 
     const drawDivision = () => {
-        drawRect(503, 200, 3, 400, 'sienna')
+        if (backgroundCounter<0){
+            drawRect(503, 200, 3, 400, 'sienna')
+        } else if (backgroundCounter>0){
+            drawRect(503, 200, 3, 400, 'slategray')
+        }
     }
 
     const displayMaxAmmoOne = () => {
@@ -348,7 +379,10 @@ window.onload = () => {
 
     const createBulletOne = () => {
         if(playerOne.ammo.length<playerOne.maxAmmo){
+            farWestShootAudioOne.pause()
             playerOne.ammo.push(new Bullet(playerOne.x+65, playerOne.y+70))
+            farWestShootAudioOne.volume = .3
+            farWestShootAudioOne.play()
         }
     }
 
@@ -362,7 +396,10 @@ window.onload = () => {
 
     const createBulletTwo = () => {
         if(playerTwo.ammo.length<playerTwo.maxAmmo){
+        farWestShootAudioTwo.pause()
         playerTwo.ammo.push(new Bullet(playerTwo.x, playerTwo.y+70))
+        farWestShootAudioTwo.volume = .3
+        farWestShootAudioTwo.play()
         }
     }
 
@@ -505,15 +542,24 @@ window.onload = () => {
             playerOne.movesCounterUpgrades = 0
             playerTwo.movesCounter = 0
             playerTwo.movesCounterUpgrades = 0
-            backgroundCounter = 0
             magikarp.style.display = "none";
+            if((playerOne.alive===false || playerTwo.alive===false) && backgroundCounter<0){
+                farWestWinAudio.play()
+            }
+            if((playerOne.alive===false || playerTwo.alive===false) && backgroundCounter>0){
+                starWarsTwoWinAudio.play()
+            }
+            backgroundCounter = 0
     }
 
     const checkEndOfGame = () => {
         if(playerOne.alive===false || playerTwo.alive===false){
             mainView.style.display = "none";
+            starWarsDuelAudio.pause()  
+            farWestDuelAudio.pause()
             resetValues()
         }
+        
         if(playerOne.alive===false){
             twoWin.style.display = "block";
             playerOne.alive = true
@@ -523,6 +569,30 @@ window.onload = () => {
             playerTwo.alive = true
         }
     }
+
+    //------------------------Sonido:
+
+    const soundOff = () => {
+        farWestTransitionAudio.volume = 0
+        farWestDuelAudio.volume = 0
+        farWestWinAudio.volume = 0
+        farWestShootAudioOne.volume = 0
+        farWestShootAudioTwo.volume = 0
+        starWarsDuelAudio.volume = 0
+        starWarsTransitionAudio.volume = 0
+    }
+
+    const soundOn = () => {
+        farWestTransitionAudio.volume = .3
+        farWestDuelAudio.volume = .05
+        farWestWinAudio.volume = .2
+        farWestShootAudioOne.volume = .1
+        farWestShootAudioTwo.volume = .1
+        starWarsDuelAudio.volume = .2
+        starWarsTransitionAudio.volume = .5
+    }
+
+
 
     
     // EVENT LISTENERS =================================
@@ -546,12 +616,17 @@ window.onload = () => {
                 movePlayerTwo()
             } else {
                 farWestTransition.style.display = "block"
+                farWestTransitionAudio.play()
                 setTimeout(()=>{
                     farWestTransition.style.display = "none"
-                }, 4300)
+                    farWestTransitionAudio.pause()
+                    setTimeout(()=>{
+                        farWestDuelAudio.play()
+                    }, 700)
+                }, 4450)
                 setTimeout(()=>{
                     backgroundCounter = -1
-                }, 4200)
+                }, 4350)
             }
         } else if(event.key === 'ArrowRight'){
             if(backgroundCounter!==0){
@@ -559,12 +634,17 @@ window.onload = () => {
                 movePlayerTwo()
             } else {
                 starWarsTransition.style.display = "block"
+                starWarsTransitionAudio.play()
                 setTimeout(()=>{
                     starWarsTransition.style.display = "none"
-                }, 4200)
+                    starWarsTransitionAudio.pause()
+                    setTimeout(()=>{
+                        starWarsDuelAudio.play()
+                    }, 700)
+                }, 5800)
                 setTimeout(()=>{
                     backgroundCounter = 1
-                }, 4100)
+                }, 5700)
             }
         } else if(event.key === 'a'){
             playerOne.direction = 'left'
@@ -583,11 +663,23 @@ window.onload = () => {
         }
     })
 
+    soundOnButton.addEventListener('click', ()=>{
+        soundOn()
+    })
+
+    soundOffButton.addEventListener('click', ()=>{
+        soundOff()
+    })
+    
+
     restartArr.forEach((button)=>{
         button.onclick = () => {
             mainView.style.display = "block";
             oneWin.style.display = "none";
             twoWin.style.display = "none";
+            farWestWinAudio.pause()
+            starWarsTwoWinAudio.pause()
+            
         }
     })
     
@@ -595,10 +687,10 @@ window.onload = () => {
     // INVOCACIONES ====================================
 
     generateRandomUpgradeOne()
-        generateRandomUpgradeTwo()
-        updateCanvas()
-        setInterval(generateRandomUpgradeOne, 7000)  // El valor de este intervalo nos dice cada cuanto cambiará de posición la upgrade
-        setInterval(generateRandomUpgradeTwo, 7000)
+    generateRandomUpgradeTwo()
+    updateCanvas()
+    setInterval(generateRandomUpgradeOne, 7000)  // El valor de este intervalo nos dice cada cuanto cambiará de posición la upgrade
+    setInterval(generateRandomUpgradeTwo, 7000)
 
 }
 
