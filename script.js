@@ -20,9 +20,9 @@ window.onload = () => {
     farWestDuelAudio.volume = .05
     const farWestWinAudio = new Audio('./audio/farwest-win (mp3cut.net).mp3')
     farWestWinAudio.volume = .2
-    const farWestShootAudioOne = new Audio('./audio/western-ricochet.mp3')
+    const farWestShootAudioOne = new Audio('./audio/western-ricochet (mp3cut.net).mp3')
     farWestShootAudioOne.volume = .1
-    const farWestShootAudioTwo = new Audio('./audio/western-ricochet.mp3')
+    const farWestShootAudioTwo = new Audio('./audio/western-ricochet (mp3cut.net).mp3')
     farWestShootAudioTwo.volume = .1
     const starWarsTransitionAudio = new Audio('./audio/Meco - Star Wars and Other Galactic Funk_ Star Wars (HD Vinyl Recording) (mp3cut.net).mp3')
     starWarsTransitionAudio.volume = .3
@@ -31,6 +31,11 @@ window.onload = () => {
     starWarsDuelAudio.volume = .2
     const starWarsTwoWinAudio = new Audio("./audio/Star Wars- The Imperial March (Darth Vader's Theme) (mp3cut.net).mp3")
     starWarsTwoWinAudio.volume = .5
+    const selectPageAudio = new Audio('./audio/Avengers Theme Song From 2012 to 2019 [UPDATED] _ OST _ It Is Not True (mp3cut.net).mp3')
+    selectPageAudio.volume = .1
+    selectPageAudio.autoplay = true
+    selectPageAudio.loop = true
+    
     const restartArr = [...restart]
     const backgroundImages = ['./images/Backgrounds/town_background.jpg', './images/Backgrounds/selection_page.jpg', './images/Backgrounds/starwars-bg.png']
     let backgroundCounter = 0
@@ -413,13 +418,13 @@ window.onload = () => {
     
     const moveBulletsOne = () => {
         playerOne.ammo.forEach((bullet)=>{ 
-            return bullet.x+=15
+            return bullet.x+=20
           })
     }
 
     const moveBulletsTwo = () => {
         playerTwo.ammo.forEach((bullet)=>{ 
-            return bullet.x-=15
+            return bullet.x-=20
           })
     }
 
@@ -558,6 +563,7 @@ window.onload = () => {
             starWarsDuelAudio.pause()  
             farWestDuelAudio.pause()
             resetValues()
+            resetSounds()
         }
         
         if(playerOne.alive===false){
@@ -580,6 +586,8 @@ window.onload = () => {
         farWestShootAudioTwo.volume = 0
         starWarsDuelAudio.volume = 0
         starWarsTransitionAudio.volume = 0
+        starWarsTwoWinAudio.volume = 0
+        selectPageAudio.volume = 0
     }
 
     const soundOn = () => {
@@ -589,7 +597,19 @@ window.onload = () => {
         farWestShootAudioOne.volume = .1
         farWestShootAudioTwo.volume = .1
         starWarsDuelAudio.volume = .2
-        starWarsTransitionAudio.volume = .5
+        starWarsTransitionAudio.volume = .3
+        starWarsTwoWinAudio.volume = .5
+        selectPageAudio.volume = .1
+    }
+
+    const resetSounds = () => {
+        farWestTransitionAudio.currentTime = 0
+        farWestDuelAudio.currentTime = 0
+        farWestWinAudio.currentTime = 0
+        starWarsDuelAudio.currentTime = 0
+        starWarsTransitionAudio.currentTime = 0
+        starWarsTwoWinAudio.currentTime = 0
+        selectPageAudio.currentTime = 0
     }
 
 
@@ -615,6 +635,7 @@ window.onload = () => {
                 playerTwo.direction = 'left'
                 movePlayerTwo()
             } else {
+                selectPageAudio.pause()
                 farWestTransition.style.display = "block"
                 farWestTransitionAudio.play()
                 setTimeout(()=>{
@@ -633,6 +654,7 @@ window.onload = () => {
                 playerTwo.direction = 'right'
                 movePlayerTwo()
             } else {
+                selectPageAudio.pause()
                 starWarsTransition.style.display = "block"
                 starWarsTransitionAudio.play()
                 setTimeout(()=>{
@@ -679,13 +701,14 @@ window.onload = () => {
             twoWin.style.display = "none";
             farWestWinAudio.pause()
             starWarsTwoWinAudio.pause()
-            
+            selectPageAudio.play()
         }
     })
     
     
     // INVOCACIONES ====================================
 
+    
     generateRandomUpgradeOne()
     generateRandomUpgradeTwo()
     updateCanvas()
