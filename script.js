@@ -38,7 +38,7 @@ window.onload = () => {
     const blasterAudioOne = new Audio('./audio/blaster.m4a')
     const blasterAudioTwo = new Audio('./audio/blaster.m4a')
     const selectPageAudio = new Audio('./audio/Avengers Theme Song From 2012 to 2019 [UPDATED] _ OST _ It Is Not True (mp3cut.net).mp3')
-    selectPageAudio.volume = 0
+    selectPageAudio.volume = .2
     selectPageAudio.autoplay = true
     selectPageAudio.loop = true
     
@@ -49,7 +49,7 @@ window.onload = () => {
    
     
     // CLASES ========================================
-
+// 
     class Player {
         constructor(_x, _rightImageRoute, _middleImage, _leftImageRoute, _rightImageRouteSW, _middleImageSW, _leftImageRouteSW){
             this.x = _x
@@ -108,8 +108,9 @@ window.onload = () => {
     
     
     // CREACIÓN DE LOS JUGADORES =====================
-
-    const playerOne = new Player(70, './images/Players/playerFour-leftStep.png', './images/Players/playerFour-middleStep.png', './images/Players/playerFour-rightStep.png', './images/Players/Yoda/yoda-zeroStep.gif', './images/Players/Yoda/yoda-firstStep.png', './images/Players/Yoda/yoda-secondStep.png')
+// 
+//
+    const playerOne = new Player(70, './images/Players/playerFour-leftStep.png', './images/Players/playerFour-middleStep.png', './images/Players/playerFour-rightStep.png', './images/Players/Yoda/yoda-zeroStep.png', './images/Players/Yoda/yoda-firstStep.png', './images/Players/Yoda/yoda-secondStep.png')
     const playerTwo = new Player(865, './images/Players/playerTwo-rightStep.png', './images/Players/playerTwo-middleStep.png', './images/Players/playerTwo-leftStep.png', './images/Players/darthvader-rightStep.png', './images/Players/darthvader-middleStep.png', './images/Players/darthvader-leftStep.png')
     
     
@@ -195,6 +196,34 @@ window.onload = () => {
         ctx.fillStyle = 'white'
         ctx.font = '25px Syne Mono'
         ctx.fillText('ARROW RIGHT', 780, 50)
+
+        ctx.fillStyle = 'white'
+        ctx.font = '15px Syne Mono'
+        ctx.fillText(`P1.USE 'A', 'S', 'D'`, 800, 440)
+
+        ctx.fillStyle = 'white'
+        ctx.font = '15px Syne Mono'
+        ctx.fillText(`AND 'W' TO MOVE`, 820, 460)
+
+        ctx.fillStyle = 'white'
+        ctx.font = '15px Syne Mono'
+        ctx.fillText(`USE 'B' TO SHOOT`, 820, 480)
+ 
+        ctx.fillStyle = 'white'
+        ctx.font = '15px Syne Mono'
+        ctx.fillText('P2.USE ARROWS TO MOVE', 800, 510)
+
+        ctx.fillStyle = 'white'
+        ctx.font = '15px Syne Mono'
+        ctx.fillText(`USE '.' TO SHOOT`, 820, 530)
+
+        ctx.fillStyle = 'white'
+        ctx.font = '15px Syne Mono'
+        ctx.fillText('UPGRADE YOU MAX AMMO', 800, 560)
+
+        ctx.fillStyle = 'white'
+        ctx.font = '15px Syne Mono'
+        ctx.fillText('& BE THE LAST ONE ALIVE!', 790, 580)
     }
 
     const drawRect = (x, y, width, height, _color) => {
@@ -303,7 +332,6 @@ window.onload = () => {
     //-------------------Personajes:
 
     const drawPlayerOne = () => {
-
         if(backgroundCounter<0){
             if(playerOne.movesCounter===0){
                 let image = new Image()
@@ -326,27 +354,28 @@ window.onload = () => {
                     ctx.drawImage(image, playerOne.x, playerOne.y, playerOne.width, playerOne.height)
                 }
             }
+            
         }
         if(backgroundCounter>0){
             if(playerOne.movesCounter===0){
                 let image = new Image()
                 image.src = playerOne.imageLeftSW
                 image.onload = () => {
-                    ctx.drawImage(image, playerOne.x, playerOne.y, playerOne.width, playerOne.height)
+                    ctx.drawImage(image, playerOne.x, playerOne.y, 70, 81)
                 }
             }
             if(playerOne.movesCounter===1){
                 let image = new Image()
-                image.src = playerOne.imageMiddleSW
+                image.src = playerOne.imageRightSW
                 image.onload = () => {
-                    ctx.drawImage(image, playerOne.x, playerOne.y, 85, playerOne.height)
+                    ctx.drawImage(image, playerOne.x, playerOne.y, 70, 81)
                 }
             }
             if(playerOne.movesCounter===2){
                 let image = new Image()
-                image.src = playerOne.imageRightSW
+                image.src = playerOne.imageMiddleSw
                 image.onload = () => {
-                    ctx.drawImage(image, playerOne.x, playerOne.y, playerOne.width, playerOne.height)
+                    ctx.drawImage(image, playerOne.x, playerOne.y, 70, 81)
                 }
             }
         }
@@ -357,27 +386,53 @@ window.onload = () => {
     
     const drawPlayerTwo = () => {
 
-        if(playerTwo.movesCounter===0){
-            let playerTwo = new Image()
-            playerTwo.src = playerTwo.imageLeft
-            playerTwo.onload = () => {
-                ctx.drawImage(playerTwo, playerTwo.x, playerTwo.y, playerTwo.width, playerTwo.height)
+        if(backgroundCounter<0){
+            if(playerTwo.movesCounter===0){
+                let image = new Image()
+                image.src = playerTwo.imageLeft
+                image.onload = () => {
+                    ctx.drawImage(image, playerTwo.x, playerTwo.y, playerTwo.width, playerTwo.height)
+                }
+            }
+            if(playerTwo.movesCounter===1){
+                let image = new Image()
+                image.src = playerTwo.imageMiddle
+                image.onload = () => {
+                    ctx.drawImage(image, playerTwo.x, playerTwo.y, 83, playerTwo.height)
+                }
+            }
+            if(playerTwo.movesCounter===2){
+                let image = new Image()
+                image.src = playerTwo.imageRight
+                image.onload = () => {
+                    ctx.drawImage(image, playerTwo.x, playerTwo.y, playerTwo.width, playerTwo.height)
+                }
             }
         }
-        if(playerTwo.movesCounter===1){
-            let image = new Image()
-            image.src = playerTwo.imageMiddle
-            image.onload = () => {
-                ctx.drawImage(image, playerTwo.x, playerTwo.y, 83, playerTwo.height)
+        if(backgroundCounter>0){
+            if(playerTwo.movesCounter===0){
+                let image = new Image()
+                image.src = playerTwo.imageLeftSW
+                image.onload = () => {
+                    ctx.drawImage(image, playerTwo.x, playerTwo.y, 120, 130)
+                }
+            }
+            if(playerTwo.movesCounter===1){
+                let image = new Image()
+                image.src = playerTwo.imageRightSW
+                image.onload = () => {
+                    ctx.drawImage(image, playerTwo.x, playerTwo.y, 120, 130)
+                }
+            }
+            if(playerTwo.movesCounter===2){
+                let image = new Image()
+                image.src = playerTwo.imageMiddleSw
+                image.onload = () => {
+                    ctx.drawImage(image, playerTwo.x, playerTwo.y, 120, 130)
+                }
             }
         }
-        if(playerTwo.movesCounter===2){
-            let image = new Image()
-            image.src = playerTwo.imageRight
-            image.onload = () => {
-                ctx.drawImage(image, playerTwo.x, playerTwo.y, playerTwo.width, playerTwo.height)
-            }
-        }
+
 
 
     }
@@ -464,7 +519,7 @@ window.onload = () => {
                 farWestShootAudioOne.volume = .3
                 farWestShootAudioOne.play()
             } else if (backgroundCounter>0){
-                playerOne.ammo.push(new Bullet(playerOne.x+65, playerOne.y+70, 40, 'chartreuse'))
+                playerOne.ammo.push(new Bullet(playerOne.x+65, playerOne.y+30, 40, 'chartreuse'))
                 blasterAudioOne.play()
             }
         }
@@ -603,8 +658,14 @@ window.onload = () => {
     
     const checkHurtOne = () => {
         playerTwo.ammo.forEach((bullet)=>{
-            if(bullet.x+3 < playerOne.x+35 && bullet.x+3 > playerOne.x && bullet.y > playerOne.y+15 && bullet.y < playerOne.y+120){
-                bullet.x -= 200
+            if(backgroundCounter<0 && bullet.x+3 < playerOne.x+35 && bullet.x+3 > playerOne.x && bullet.y > playerOne.y+15 && bullet.y < playerOne.y+120){
+                bullet.x -= 500
+                playerOne.receiveDamage()
+                playerOne.checkPlayerLifes()
+                checkEndOfGame()
+            }
+            if(backgroundCounter>0 && bullet.x < playerOne.x+35 && bullet.x+3 > playerOne.x && bullet.y > playerOne.y && bullet.y < playerOne.y+80){
+                bullet.x -= 500
                 playerOne.receiveDamage()
                 playerOne.checkPlayerLifes()
                 checkEndOfGame()
@@ -615,7 +676,7 @@ window.onload = () => {
     const checkHurtTwo = () => {
         playerOne.ammo.forEach((bullet)=>{
             if(bullet.x+3 > playerTwo.x+32 && bullet.x+3 < playerTwo.x+65 && bullet.y > playerTwo.y+15 && bullet.y < playerTwo.y+120){
-                bullet.x += 200
+                bullet.x += 500
                 playerTwo.receiveDamage()
                 playerTwo.checkPlayerLifes()
                 checkEndOfGame()
@@ -830,7 +891,7 @@ window.onload = () => {
     updateCanvas()
     setInterval(generateRandomUpgradeOne, 7000)  // El valor de este intervalo nos dice cada cuanto cambiará de posición la upgrade
     setInterval(generateRandomUpgradeTwo, 7000)
-
+    
 }
 
 
