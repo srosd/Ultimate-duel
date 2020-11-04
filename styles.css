@@ -32,6 +32,22 @@ body{
     font-size: 70px;
 }
 
+#yoda{
+    margin-top: 5vh;
+    padding-top: 8vh;
+    padding-bottom: 10vh;
+    background-color: #000;
+    color: blanchedalmond;
+    display: none;
+}
+#yoda iframe{
+    margin-bottom: 4vh;
+}
+
+#yoda h1{
+    font-size: 70px;
+}
+
 #two-win{
     margin-top: 5vh;
     padding-top: 15vh;
@@ -45,6 +61,22 @@ body{
 }
 
 #two-win h1{
+    font-size: 70px;
+}
+
+#vader{
+    margin-top: 5vh;
+    padding-top: 15vh;
+    padding-bottom: 10vh;
+    background-color: #000;
+    color: blanchedalmond;
+    display: none;
+}
+#vader iframe{
+    margin-bottom: 4vh;
+}
+
+#vader h1{
     font-size: 70px;
 }
 

@@ -7,6 +7,8 @@ window.onload = () => {
     const mainView = document.getElementById('mainview')
     const oneWin = document.getElementById('one-win')
     const twoWin = document.getElementById('two-win')
+    const oneWinYoda = document.getElementById('yoda')
+    const twoWinVader = document.getElementById('vader')
     const restart = document.getElementsByClassName('restart')
     const magikarp = document.getElementById('magikarp')
     const farWestTransition = document.getElementById('far-west-transition')
@@ -29,15 +31,19 @@ window.onload = () => {
     const starWarsDuelAudio = new Audio('./audio/John Williams - Duel of the Fates (Star Wars Soundtrack) [HQ] (mp3cut.net).mp3')
     starWarsDuelAudio.loop = true
     starWarsDuelAudio.volume = .2
+    const starWarsOneWinAudio = new Audio('./audio/theForceWins.mp3')
+    starWarsOneWinAudio.volume = .3
     const starWarsTwoWinAudio = new Audio("./audio/Star Wars- The Imperial March (Darth Vader's Theme) (mp3cut.net).mp3")
-    starWarsTwoWinAudio.volume = .5
+    starWarsTwoWinAudio.volume = .4
+    const blasterAudioOne = new Audio('./audio/blaster.m4a')
+    const blasterAudioTwo = new Audio('./audio/blaster.m4a')
     const selectPageAudio = new Audio('./audio/Avengers Theme Song From 2012 to 2019 [UPDATED] _ OST _ It Is Not True (mp3cut.net).mp3')
-    selectPageAudio.volume = .1
+    selectPageAudio.volume = 0
     selectPageAudio.autoplay = true
     selectPageAudio.loop = true
     
     const restartArr = [...restart]
-    const backgroundImages = ['./images/Backgrounds/town_background.jpg', './images/Backgrounds/selection_page.jpg', './images/Backgrounds/starwars-bg.png']
+    const backgroundImages = ['./images/Backgrounds/town_background.jpg', './images/Backgrounds/selection_page.jpg', './images/Backgrounds/starwars-field.jpg']
     let backgroundCounter = 0
     
    
@@ -45,7 +51,7 @@ window.onload = () => {
     // CLASES ========================================
 
     class Player {
-        constructor(_x, _rightImageRoute, _middleImage, _leftImageRoute){
+        constructor(_x, _rightImageRoute, _middleImage, _leftImageRoute, _rightImageRouteSW, _middleImageSW, _leftImageRouteSW){
             this.x = _x
             this.y = 300
             this.width = 65
@@ -53,6 +59,9 @@ window.onload = () => {
             this.imageRight = _rightImageRoute
             this.imageMiddle = _middleImage
             this.imageLeft = _leftImageRoute
+            this.imageRightSW = _rightImageRouteSW
+            this.imageMiddleSw = _middleImageSW
+            this.imageLeftSW = _leftImageRouteSW
             this.alive = true
             this.lifes = 3
             this.direction = ''
@@ -79,12 +88,12 @@ window.onload = () => {
     } 
 
     class Bullet {
-        constructor(_x, _y){
+        constructor(_x, _y,_width, _color){
             this.x = _x
             this.y = _y
             this.height = 3
-            this.width = 14
-            this.color = 'black'
+            this.width = _width
+            this.color = _color
         }
     }
 
@@ -100,8 +109,8 @@ window.onload = () => {
     
     // CREACIÓN DE LOS JUGADORES =====================
 
-    const playerOne = new Player(70, './images/Players/playerFour-leftStep.png', './images/Players/playerFour-middleStep.png', './images/Players/playerFour-rightStep.png')
-    const playerTwo = new Player(865, './images/Players/playerTwo-rightStep.png', './images/Players/playerTwo-middleStep.png', './images/Players/playerTwo-leftStep.png')
+    const playerOne = new Player(70, './images/Players/playerFour-leftStep.png', './images/Players/playerFour-middleStep.png', './images/Players/playerFour-rightStep.png', './images/Players/Yoda/yoda-zeroStep.gif', './images/Players/Yoda/yoda-firstStep.png', './images/Players/Yoda/yoda-secondStep.png')
+    const playerTwo = new Player(865, './images/Players/playerTwo-rightStep.png', './images/Players/playerTwo-middleStep.png', './images/Players/playerTwo-leftStep.png', './images/Players/darthvader-rightStep.png', './images/Players/darthvader-middleStep.png', './images/Players/darthvader-leftStep.png')
     
     
     // FUNCIONES =====================================
@@ -197,12 +206,16 @@ window.onload = () => {
         if (backgroundCounter<0){
             drawRect(503, 200, 3, 400, 'sienna')
         } else if (backgroundCounter>0){
-            drawRect(503, 200, 3, 400, 'slategray')
+            drawRect(503, 270, 3, 400, 'black')
         }
     }
 
     const displayMaxAmmoOne = () => {
-        ctx.fillStyle = 'black'
+        if(backgroundCounter<0){
+            ctx.fillStyle = 'black'
+        } else if (backgroundCounter>0){
+            ctx.fillStyle = 'white'
+        }
         ctx.font = '20px Syne Mono'
         if(playerOne.maxAmmo===1){
             ctx.fillText(`${playerOne.maxAmmo} shoot max`, 122, 581)
@@ -212,7 +225,11 @@ window.onload = () => {
     }
 
     const displayMaxAmmoTwo = () => {
-        ctx.fillStyle = 'black'
+        if(backgroundCounter<0){
+            ctx.fillStyle = 'black'
+        } else if (backgroundCounter>0){
+            ctx.fillStyle = 'white'
+        }
         ctx.font = '20px Syne Mono'
         if(playerTwo.maxAmmo===1){
             ctx.fillText(`${playerTwo.maxAmmo} shoot max`, 752, 581)
@@ -223,32 +240,62 @@ window.onload = () => {
 
     const drawLifesOne = () => {
         const life = new Image()
-        life.src = './images/Elements/life.png'
-        life.onload = () => {
-            if(playerOne.lifes>=1){
-                ctx.drawImage(life, 20, 565, 30, 20)
+        if(backgroundCounter<0){
+            life.src = './images/Elements/life.png'
+            life.onload = () => {
+                if(playerOne.lifes>=1){
+                    ctx.drawImage(life, 20, 565, 30, 20)
+                }
+                if (playerOne.lifes>=2){
+                    ctx.drawImage(life, 50, 565, 30, 20)
+                }
+                if(playerOne.lifes===3){
+                    ctx.drawImage(life, 80, 565, 30, 20)
+                }
             }
-            if (playerOne.lifes>=2){
-                ctx.drawImage(life, 50, 565, 30, 20)
-            }
-            if(playerOne.lifes===3){
-                ctx.drawImage(life, 80, 565, 30, 20)
+        } else if (backgroundCounter>0){
+            life.src = './images/Elements/life-white.png'
+            life.onload = () => {
+                if(playerOne.lifes>=1){
+                    ctx.drawImage(life, 20, 560, 30, 30)
+                }
+                if (playerOne.lifes>=2){
+                    ctx.drawImage(life, 50, 560, 30, 30)
+                }
+                if(playerOne.lifes===3){
+                    ctx.drawImage(life, 80, 560, 30, 30)
+                }
             }
         }
     }
 
     const drawLifesTwo = () => {
         const life = new Image()
-        life.src = './images/Elements/life.png'
-        life.onload = () => {
-            if(playerTwo.lifes>=1){
-                ctx.drawImage(life, 950, 565, 30, 20)
+        if(backgroundCounter<0){
+            life.src = './images/Elements/life.png'
+            life.onload = () => {
+                if(playerTwo.lifes>=1){
+                    ctx.drawImage(life, 950, 565, 30, 20)
+                }
+                if (playerTwo.lifes>=2){
+                    ctx.drawImage(life, 920, 565, 30, 20)
+                }
+                if(playerTwo.lifes===3){
+                    ctx.drawImage(life, 890, 565, 30, 20)
+                }
             }
-            if (playerTwo.lifes>=2){
-                ctx.drawImage(life, 920, 565, 30, 20)
-            }
-            if(playerTwo.lifes===3){
-                ctx.drawImage(life, 890, 565, 30, 20)
+        } else if (backgroundCounter>0){
+            life.src = './images/Elements/life-white.png'
+            life.onload = () => {
+                if(playerTwo.lifes>=1){
+                    ctx.drawImage(life, 950, 560, 30, 30)
+                }
+                if (playerTwo.lifes>=2){
+                    ctx.drawImage(life, 920, 560, 30, 30)
+                }
+                if(playerTwo.lifes===3){
+                    ctx.drawImage(life, 890, 560, 30, 30)
+                }
             }
         }
     }
@@ -257,27 +304,53 @@ window.onload = () => {
 
     const drawPlayerOne = () => {
 
-        if(playerOne.movesCounter===0){
-            let cowboyOne = new Image()
-            cowboyOne.src = playerOne.imageLeft
-            cowboyOne.onload = () => {
-                ctx.drawImage(cowboyOne, playerOne.x, playerOne.y, playerOne.width, playerOne.height)
+        if(backgroundCounter<0){
+            if(playerOne.movesCounter===0){
+                let image = new Image()
+                image.src = playerOne.imageLeft
+                image.onload = () => {
+                    ctx.drawImage(image, playerOne.x, playerOne.y, playerOne.width, playerOne.height)
+                }
+            }
+            if(playerOne.movesCounter===1){
+                let image = new Image()
+                image.src = playerOne.imageMiddle
+                image.onload = () => {
+                    ctx.drawImage(image, playerOne.x, playerOne.y, 85, playerOne.height)
+                }
+            }
+            if(playerOne.movesCounter===2){
+                let image = new Image()
+                image.src = playerOne.imageRight
+                image.onload = () => {
+                    ctx.drawImage(image, playerOne.x, playerOne.y, playerOne.width, playerOne.height)
+                }
             }
         }
-        if(playerOne.movesCounter===1){
-            let cowboyOne = new Image()
-            cowboyOne.src = playerOne.imageMiddle
-            cowboyOne.onload = () => {
-                ctx.drawImage(cowboyOne, playerOne.x, playerOne.y, 85, playerOne.height)
+        if(backgroundCounter>0){
+            if(playerOne.movesCounter===0){
+                let image = new Image()
+                image.src = playerOne.imageLeftSW
+                image.onload = () => {
+                    ctx.drawImage(image, playerOne.x, playerOne.y, playerOne.width, playerOne.height)
+                }
+            }
+            if(playerOne.movesCounter===1){
+                let image = new Image()
+                image.src = playerOne.imageMiddleSW
+                image.onload = () => {
+                    ctx.drawImage(image, playerOne.x, playerOne.y, 85, playerOne.height)
+                }
+            }
+            if(playerOne.movesCounter===2){
+                let image = new Image()
+                image.src = playerOne.imageRightSW
+                image.onload = () => {
+                    ctx.drawImage(image, playerOne.x, playerOne.y, playerOne.width, playerOne.height)
+                }
             }
         }
-        if(playerOne.movesCounter===2){
-            let cowboyOne = new Image()
-            cowboyOne.src = playerOne.imageRight
-            cowboyOne.onload = () => {
-                ctx.drawImage(cowboyOne, playerOne.x, playerOne.y, playerOne.width, playerOne.height)
-            }
-        }
+
 
 
     }
@@ -285,24 +358,24 @@ window.onload = () => {
     const drawPlayerTwo = () => {
 
         if(playerTwo.movesCounter===0){
-            let cowboyTwo = new Image()
-            cowboyTwo.src = playerTwo.imageLeft
-            cowboyTwo.onload = () => {
-                ctx.drawImage(cowboyTwo, playerTwo.x, playerTwo.y, playerTwo.width, playerTwo.height)
+            let playerTwo = new Image()
+            playerTwo.src = playerTwo.imageLeft
+            playerTwo.onload = () => {
+                ctx.drawImage(playerTwo, playerTwo.x, playerTwo.y, playerTwo.width, playerTwo.height)
             }
         }
         if(playerTwo.movesCounter===1){
-            let cowboyTwo = new Image()
-            cowboyTwo.src = playerTwo.imageMiddle
-            cowboyTwo.onload = () => {
-                ctx.drawImage(cowboyTwo, playerTwo.x, playerTwo.y, 83, playerTwo.height)
+            let image = new Image()
+            image.src = playerTwo.imageMiddle
+            image.onload = () => {
+                ctx.drawImage(image, playerTwo.x, playerTwo.y, 83, playerTwo.height)
             }
         }
         if(playerTwo.movesCounter===2){
-            let cowboyTwo = new Image()
-            cowboyTwo.src = playerTwo.imageRight
-            cowboyTwo.onload = () => {
-                ctx.drawImage(cowboyTwo, playerTwo.x, playerTwo.y, playerTwo.width, playerTwo.height)
+            let image = new Image()
+            image.src = playerTwo.imageRight
+            image.onload = () => {
+                ctx.drawImage(image, playerTwo.x, playerTwo.y, playerTwo.width, playerTwo.height)
             }
         }
 
@@ -385,9 +458,15 @@ window.onload = () => {
     const createBulletOne = () => {
         if(playerOne.ammo.length<playerOne.maxAmmo){
             farWestShootAudioOne.pause()
-            playerOne.ammo.push(new Bullet(playerOne.x+65, playerOne.y+70))
-            farWestShootAudioOne.volume = .3
-            farWestShootAudioOne.play()
+            blasterAudioOne.pause()
+            if(backgroundCounter<0){
+                playerOne.ammo.push(new Bullet(playerOne.x+65, playerOne.y+70, 14, 'black'))
+                farWestShootAudioOne.volume = .3
+                farWestShootAudioOne.play()
+            } else if (backgroundCounter>0){
+                playerOne.ammo.push(new Bullet(playerOne.x+65, playerOne.y+70, 40, 'chartreuse'))
+                blasterAudioOne.play()
+            }
         }
     }
 
@@ -401,10 +480,16 @@ window.onload = () => {
 
     const createBulletTwo = () => {
         if(playerTwo.ammo.length<playerTwo.maxAmmo){
-        farWestShootAudioTwo.pause()
-        playerTwo.ammo.push(new Bullet(playerTwo.x, playerTwo.y+70))
-        farWestShootAudioTwo.volume = .3
-        farWestShootAudioTwo.play()
+            farWestShootAudioTwo.pause()
+            blasterAudioTwo.pause()
+            if(backgroundCounter<0){
+                playerTwo.ammo.push(new Bullet(playerTwo.x, playerTwo.y+70, 14, 'black'))
+                farWestShootAudioTwo.volume = .3
+                farWestShootAudioTwo.play()
+            } else if (backgroundCounter>0){
+                playerTwo.ammo.push(new Bullet(playerTwo.x, playerTwo.y+70, 40, 'red'))
+                blasterAudioTwo.play()
+            }
         }
     }
 
@@ -418,13 +503,13 @@ window.onload = () => {
     
     const moveBulletsOne = () => {
         playerOne.ammo.forEach((bullet)=>{ 
-            return bullet.x+=20
+            return bullet.x+=30
           })
     }
 
     const moveBulletsTwo = () => {
         playerTwo.ammo.forEach((bullet)=>{ 
-            return bullet.x-=20
+            return bullet.x-=30
           })
     }
 
@@ -462,7 +547,11 @@ window.onload = () => {
     const drawUpgradesOne = () => {
         if(playerOne.upgrade.length>0){
             upgradeImage = new Image()
-            upgradeImage.src = './images/Elements/upgrade.png'
+            if(backgroundCounter<0){
+                upgradeImage.src = './images/Elements/upgrade.png'
+            } else if (backgroundCounter>0){
+                upgradeImage.src = './images/Elements/blaster.png'
+            }
             upgradeImage.onload = () => {
                 ctx.drawImage(upgradeImage, playerOne.upgrade[0].x, playerOne.upgrade[0].y, playerOne.upgrade[0].width, playerOne.upgrade[0].height)
             }
@@ -472,7 +561,11 @@ window.onload = () => {
     const drawUpgradesTwo = () => {
         if(playerTwo.upgrade.length>0){
             upgradeImage = new Image()
-            upgradeImage.src = './images/Elements/upgrade.png'
+            if(backgroundCounter<0){
+                upgradeImage.src = './images/Elements/upgrade.png'
+            } else if (backgroundCounter>0){
+                upgradeImage.src = './images/Elements/blaster.png'
+            }
             upgradeImage.onload = () => {
                 ctx.drawImage(upgradeImage, playerTwo.upgrade[0].x, playerTwo.upgrade[0].y, playerTwo.upgrade[0].width, playerTwo.upgrade[0].height)
             }
@@ -548,11 +641,24 @@ window.onload = () => {
             playerTwo.movesCounter = 0
             playerTwo.movesCounterUpgrades = 0
             magikarp.style.display = "none";
-            if((playerOne.alive===false || playerTwo.alive===false) && backgroundCounter<0){
-                farWestWinAudio.play()
-            }
-            if((playerOne.alive===false || playerTwo.alive===false) && backgroundCounter>0){
-                starWarsTwoWinAudio.play()
+            if(backgroundCounter<0){
+                if(playerOne.alive===false){
+                    twoWin.style.display = "block";
+                    playerOne.alive = true
+                }
+                if(playerTwo.alive===false){
+                    oneWin.style.display = "block";
+                    playerTwo.alive = true
+                }
+            }else{
+                if(playerOne.alive===false){
+                    twoWinVader.style.display = "block";
+                    playerOne.alive = true
+                }
+                if(playerTwo.alive===false){
+                    oneWinYoda.style.display = "block";
+                    playerTwo.alive = true
+                }
             }
             backgroundCounter = 0
     }
@@ -560,20 +666,20 @@ window.onload = () => {
     const checkEndOfGame = () => {
         if(playerOne.alive===false || playerTwo.alive===false){
             mainView.style.display = "none";
+            if(backgroundCounter<0){
+                farWestWinAudio.play()
+            }else if(backgroundCounter>0 && playerOne.alive===true){
+                starWarsOneWinAudio.play()
+            } else if(backgroundCounter>0 && playerTwo.alive===true){
+                starWarsTwoWinAudio.play()
+            }
             starWarsDuelAudio.pause()  
             farWestDuelAudio.pause()
-            resetValues()
             resetSounds()
+            resetValues()
         }
         
-        if(playerOne.alive===false){
-            twoWin.style.display = "block";
-            playerOne.alive = true
-        }
-        if(playerTwo.alive===false){
-            oneWin.style.display = "block";
-            playerTwo.alive = true
-        }
+        
     }
 
     //------------------------Sonido:
@@ -587,6 +693,9 @@ window.onload = () => {
         starWarsDuelAudio.volume = 0
         starWarsTransitionAudio.volume = 0
         starWarsTwoWinAudio.volume = 0
+        starWarsOneWinAudio.volume = 0
+        blasterAudioOne.volume = 0
+        blasterAudioTwo.volume = 0
         selectPageAudio.volume = 0
     }
 
@@ -598,7 +707,10 @@ window.onload = () => {
         farWestShootAudioTwo.volume = .1
         starWarsDuelAudio.volume = .2
         starWarsTransitionAudio.volume = .3
-        starWarsTwoWinAudio.volume = .5
+        starWarsTwoWinAudio.volume = .4
+        starWarsOneWinAudio.volume = .3
+        blasterAudioOne.volume = .3
+        blasterAudioTwo.volume = .3
         selectPageAudio.volume = .1
     }
 
@@ -609,6 +721,7 @@ window.onload = () => {
         starWarsDuelAudio.currentTime = 0
         starWarsTransitionAudio.currentTime = 0
         starWarsTwoWinAudio.currentTime = 0
+        starWarsOneWinAudio.currentTime = 0
         selectPageAudio.currentTime = 0
     }
 
@@ -699,8 +812,11 @@ window.onload = () => {
             mainView.style.display = "block";
             oneWin.style.display = "none";
             twoWin.style.display = "none";
+            oneWinYoda.style.display = "none"
+            twoWinVader.style.display = "none"
             farWestWinAudio.pause()
             starWarsTwoWinAudio.pause()
+            starWarsOneWinAudio.pause()
             selectPageAudio.play()
         }
     })
