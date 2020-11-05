@@ -516,7 +516,6 @@ window.onload = () => {
             blasterAudioOne.pause()
             if(backgroundCounter<0){
                 playerOne.ammo.push(new Bullet(playerOne.x+65, playerOne.y+70, 14, 'black'))
-                farWestShootAudioOne.volume = .3
                 farWestShootAudioOne.play()
             } else if (backgroundCounter>0){
                 playerOne.ammo.push(new Bullet(playerOne.x+65, playerOne.y+30, 40, 'chartreuse'))
@@ -539,7 +538,6 @@ window.onload = () => {
             blasterAudioTwo.pause()
             if(backgroundCounter<0){
                 playerTwo.ammo.push(new Bullet(playerTwo.x, playerTwo.y+70, 14, 'black'))
-                farWestShootAudioTwo.volume = .3
                 farWestShootAudioTwo.play()
             } else if (backgroundCounter>0){
                 playerTwo.ammo.push(new Bullet(playerTwo.x, playerTwo.y+70, 40, 'red'))
