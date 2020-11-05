@@ -190,12 +190,12 @@ window.onload = () => {
             ctx.drawImage(selectPage, 0, 0, 1000, 600)
         }
         ctx.fillStyle = 'black'
-        ctx.font = '25px Syne Mono'
+        ctx.font = '30px Syne Mono'
         ctx.fillText('ARROW LEFT', 50, 50)
 
         ctx.fillStyle = 'white'
-        ctx.font = '25px Syne Mono'
-        ctx.fillText('ARROW RIGHT', 780, 50)
+        ctx.font = '30px Syne Mono'
+        ctx.fillText('ARROW RIGHT', 760, 50)
 
         ctx.fillStyle = 'white'
         ctx.font = '15px Syne Mono'
