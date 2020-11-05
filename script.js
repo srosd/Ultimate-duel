@@ -638,17 +638,26 @@ window.onload = () => {
     }
 
     const checkUpgradeCatchOne = () => {
-        if(playerOne.upgrade[0].x+20 > playerOne.x && playerOne.upgrade[0].x+20 < playerOne.x+65 && playerOne.upgrade[0].y+20 > playerOne.y && playerOne.upgrade[0].y+20 < playerOne.y+140 && playerOne.movesCounterUpgrades>20 && playerOne.movesCounterUpgrades<40){
+        if(backgroundCounter<0 && playerOne.upgrade[0].x+20 > playerOne.x && playerOne.upgrade[0].x+20 < playerOne.x+65 && playerOne.upgrade[0].y+20 > playerOne.y && playerOne.upgrade[0].y+20 < playerOne.y+140 && playerOne.movesCounterUpgrades>20 && playerOne.movesCounterUpgrades<40){
+            playerOne.upgradeAmmo()
+            generateRandomUpgradeOne()
+        }
+        if(backgroundCounter>0 && playerOne.upgrade[0].x+20 > playerOne.x && playerOne.upgrade[0].x+20 < playerOne.x+70 && playerOne.upgrade[0].y+20 > playerOne.y && playerOne.upgrade[0].y+20 < playerOne.y+80 && playerOne.movesCounterUpgrades>20 && playerOne.movesCounterUpgrades<40){
             playerOne.upgradeAmmo()
             generateRandomUpgradeOne()
         }
     }
 
     const checkUpgradeCatchTwo = () => {
-        if(playerTwo.upgrade[0].x+20 > playerTwo.x && playerTwo.upgrade[0].x+20 < playerTwo.x+65 && playerTwo.upgrade[0].y+20 > playerTwo.y && playerTwo.upgrade[0].y+20 < playerTwo.y+140 && playerTwo.movesCounterUpgrades>20 && playerTwo.movesCounterUpgrades<40){
+        if(backgroundCounter <0 && playerTwo.upgrade[0].x+20 > playerTwo.x && playerTwo.upgrade[0].x+20 < playerTwo.x+65 && playerTwo.upgrade[0].y+20 > playerTwo.y && playerTwo.upgrade[0].y+20 < playerTwo.y+140 && playerTwo.movesCounterUpgrades>20 && playerTwo.movesCounterUpgrades<40){
             playerTwo.upgradeAmmo()
             generateRandomUpgradeTwo()
         }
+        if(backgroundCounter >0 && playerTwo.upgrade[0].x+20 > playerTwo.x && playerTwo.upgrade[0].x+20 < playerTwo.x+95 && playerTwo.upgrade[0].y+20 > playerTwo.y && playerTwo.upgrade[0].y+20 < playerTwo.y+130 && playerTwo.movesCounterUpgrades>20 && playerTwo.movesCounterUpgrades<40){
+            playerTwo.upgradeAmmo()
+            generateRandomUpgradeTwo()
+        }
+        
     }
 
 
@@ -887,8 +896,8 @@ window.onload = () => {
     generateRandomUpgradeOne()
     generateRandomUpgradeTwo()
     updateCanvas()
-    setInterval(generateRandomUpgradeOne, 7000)  // El valor de este intervalo nos dice cada cuanto cambiará de posición la upgrade
-    setInterval(generateRandomUpgradeTwo, 7000)
+    setInterval(generateRandomUpgradeOne, 10000)  // El valor de este intervalo nos dice cada cuanto cambiará de posición la upgrade
+    setInterval(generateRandomUpgradeTwo, 10000)
     
 }
 
