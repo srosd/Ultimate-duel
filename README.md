@@ -9,8 +9,9 @@ Use left and right arrows to select the theme you want to play on.
 
 ## Controls
 
-Player 1. Use A, S, D and W keys to move on the field. Use B key to shoot. <br>
-Player 2. Use arrows to move on the field. Use . (dot) to shoot.
+Player 1. Use A, S, D and W keys to move on the field. Use B key to shoot. 
+</br>
+Player 2. Use arrows to move on the field. Use '.' (dot) to shoot.
 
 
 ## Sound
