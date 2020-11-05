@@ -7,6 +7,11 @@ You will only be able to shoot one bullet at a time at the very beginning, but y
 ## Selection Page
 Use left and right arrows to select the theme you want to play on.
 
+## Controls
+
+Player 1. Use A, S, D and W keys to move on the field. Use B key to shoot.
+Player 2. Use arrows to move on the field. Use . (dot) to shoot.
+
 
 ## Sound
 You can turn the music on and off at the bottom of the game section.
