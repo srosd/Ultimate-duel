@@ -38,7 +38,7 @@ window.onload = () => {
     const blasterAudioOne = new Audio('./audio/blaster.m4a')
     const blasterAudioTwo = new Audio('./audio/blaster.m4a')
     const selectPageAudio = new Audio('./audio/Avengers Theme Song From 2012 to 2019 [UPDATED] _ OST _ It Is Not True (mp3cut.net).mp3')
-    selectPageAudio.volume = .2
+    selectPageAudio.volume = .1
     selectPageAudio.autoplay = true
     selectPageAudio.loop = true
     
@@ -49,7 +49,7 @@ window.onload = () => {
    
     
     // CLASES ========================================
-// 
+
     class Player {
         constructor(_x, _rightImageRoute, _middleImage, _leftImageRoute, _rightImageRouteSW, _middleImageSW, _leftImageRouteSW){
             this.x = _x
