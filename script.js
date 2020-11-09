@@ -502,7 +502,7 @@ window.onload = () => {
     }
 
     const showMagikarp = () => {
-        if(playerOne.lifes===2 && playerTwo.lifes===2 && playerOne.maxAmmo+playerTwo.maxAmmo > 4){
+        if(playerOne.lifes===2 && playerTwo.lifes===1 && playerOne.maxAmmo+playerTwo.maxAmmo > 5 && playerTwo.y>300){
             magikarp.style.display = "block";
         }
     }
