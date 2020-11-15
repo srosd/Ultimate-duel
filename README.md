@@ -17,4 +17,4 @@ Player 2. Use arrows to move on the field. Use '.' (dot) to shoot.
 ## Sound
 You can turn the music on and off at the bottom of the game section.
 
-## Let's play! (https://github.com/srosd/Ultimate-duel)
+## [Let's play!] (https://github.com/srosd/Ultimate-duel)
